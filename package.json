@@ -1,0 +1,30 @@
+{
+  "name": "kiku-card-game",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "devDependencies": {
+    "gulp": "latest",
+    "gulp-concat": "latest",
+    "gulp-imagemin": "latest",
+    "gulp-jshint": "latest",
+    "gulp-minify-css": "^1.2.2",
+    "gulp-notify": "latest",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "latest"
+  },
+  "dependencies": {
+    "body-parser": "~1.15.1",
+    "compression": "^1.6.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.2.0",
+    "express": "~4.13.4",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.0",
+    "swig": "^1.4.2"
+  }
+}

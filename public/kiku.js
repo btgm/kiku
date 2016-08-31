@@ -1,0 +1,1 @@
+!function(){var o={players:1,play:function(){console.log("F"),console.log("F")}};console.log(o.players)}(),console.log("TES");

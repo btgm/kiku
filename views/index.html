@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  
+  <form action='' method='get'>
+    
+    <button name='computer-card' value='B1'>Blue 1</button>
+    <button name='computer-card' value='R1'>Red 1</button>
+    <button name='computer-card' value='Y1'>Yellow 1</button>
+    <button name='computer-card' value='G1'>Green 1</button>
+    <button name='computer-card' value='W1'>White 1</button>
+
+    <label for='play1'><input type="radio" id="play1" name="play" value='tell-color'> Tell about color</label>
+    <label for='play2'><input type="radio" id="play2" name="play" value='tell-number'> Tell about number</label>
+    <hr>
+    <label for='play3'><input type="radio" id="play3" name="play" value='discard'> Discard a card</label>
+    <label for='play4'><input type="radio" id="play4" name="play" value='play' checked> Play a card</label>
+
+
+    <button name='player-card' value='B1'>Blue 1</button>
+    <button name='player-card' value='R1'>Red 1</button>
+    <button name='player-card' value='Y1'>Yellow 1</button>
+    <button name='player-card' value='G1'>Green 1</button>
+    <button name='player-card' value='W1'>White 1</button>
+    
+  </form>
+  
+  
+{% endblock %}
