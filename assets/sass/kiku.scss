@@ -8,4 +8,52 @@
 
 label {
   display:block;
+  cursor:pointer;
+}
+
+.container {
+  width: 920px;
+  margin:0 auto;
+}
+
+button {
+  border:1px #000 solid;
+  background:#ff0;
+  -webkit-appearance:none;
+  appearance:none;
+  outline:none;
+  cursor:pointer;
+  &:hover {
+    background:#dd0;
+  }
+}
+
+input[type=radio] {
+  position:relative;
+  width:50px;
+  display:inline-block;
+  overflow:hidden;
+  border:1px #000 solid;
+  -webkit-appearance:none;
+  appearance:none;
+  height:2em;
+  outline:none;
+  
+  &:after {
+    content: " ";
+    background: #fff;
+    position: absolute;
+    width:100%;
+    height:125%;
+    top:-1px;
+    left:3px;    
+  }
+  
+  &:checked::after {
+    content: " ";
+    background: #0f0;
+    position: absolute;
+    top:0;
+    left:0;
+  }
 }
