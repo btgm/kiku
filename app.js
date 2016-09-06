@@ -6,9 +6,11 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 var compression = require('compression');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var gameplay = require('./routes/gameplay');
+var GameState = require('./GameState.js');
 
 var app = express();
 
@@ -19,8 +21,6 @@ var swig = new swig.Swig();
 app.engine('html', swig.renderFile);
 app.set('view engine', 'html');
 
-
-
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(compression());
@@ -29,6 +29,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'KIKU',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(GameState);
 
 app.use('/', routes);
 app.use('/gameplay', gameplay);
