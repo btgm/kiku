@@ -5,13 +5,15 @@
   <h1>{{ title }}</h1>
   
   <form action='' method='get'>
-
-    <button name='computer-card' value='B1'>Blue 1</button>
-    <button name='computer-card' value='R1'>Red 1</button>
-    <button name='computer-card' value='Y1'>Yellow 1</button>
-    <button name='computer-card' value='G1'>Green 1</button>
-    <button name='computer-card' value='W1'>White 1</button>
-
+    {% for card in gameState.computer %}
+      <button name='computer-card card' value='{{ card.color }}{{ card.number }}' class='color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }}'>
+        {{ card.color }} {{ card.number }}
+        <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
+        <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
+      </button>
+      
+    {% endfor %}
+    
     <label for='play1'><input type="radio" id="play1" name="play" value='tell-color'> Tell about color</label>
     <label for='play2'><input type="radio" id="play2" name="play" value='tell-number'> Tell about number</label>
 
@@ -21,13 +23,23 @@
     <label for='play4'><input type="radio" id="play4" name="play" value='play' checked> Play a card</label>
 
 
-    <button name='player-card' value='B1'>Blue 1</button>
-    <button name='player-card' value='R1'>Red 1</button>
-    <button name='player-card' value='Y1'>Yellow 1</button>
-    <button name='player-card' value='G1'>Green 1</button>
-    <button name='player-card' value='W1'>White 1</button>
+    {% for card in gameState.player %}
+      <button name='player-card card' value='{{ card.color }}{{ card.number }}' class='color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }}'>{{ card.color }} {{ card.number }}</button>
+      <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
+      <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
+    {% endfor %}
     
   </form>
+  
+  <h2>Discard Pile</h2>
+  
+  <ul>
+    {% for card in gameState.discard %}
+      <li class='card'>
+        {{ card.color }} {{ card.number }}
+      </li>  
+    {% endfor %}  
+  </ul>
 </div>  
   
 {% endblock %}

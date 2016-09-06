@@ -21,7 +21,7 @@ var GameState = function(req, res, next){
     // Starting a new game
     console.log("Starting new game.");
     
-    var colors = ['Red', 'Blue', 'Green', 'Yellow', 'White'],
+    var colors = ['red', 'blue', 'green', 'yellow', 'white'],
         numbers = [1,1,1,2,2,3,3,4,4,5],
         deck =[],
         player = [],
@@ -51,6 +51,7 @@ var GameState = function(req, res, next){
     req.session.gameState = {
       score: 0,
       deck: deck,
+      discard: [],
       player: player,
       computer: computer,
       fuseTokens: 3,
