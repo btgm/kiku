@@ -11,6 +11,7 @@
     "gulp-imagemin": "latest",
     "gulp-jshint": "latest",
     "gulp-minify-css": "^1.2.2",
+    "gulp-nodemon": "^2.1.0",
     "gulp-notify": "latest",
     "gulp-rename": "latest",
     "gulp-sass": "latest",

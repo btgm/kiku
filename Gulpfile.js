@@ -10,21 +10,27 @@ var gulp = require('gulp'),
     notify = require('gulp-notify'),
     minifyCSS = require('gulp-minify-css'),
     sourcemaps = require('gulp-sourcemaps'),
-    mainBowerFiles = require('main-bower-files');
+    nodemon = require('gulp-nodemon');
 
+gulp.task('styles', function() {
+  return gulp.src('assets/sass/kiku.scss')
+  .pipe(sourcemaps.init())
+	.pipe(sass({ style: 'compressed' }))
+  .pipe(minifyCSS())
+  .pipe(rename('kiku.css'))
+  .pipe(sourcemaps.write('.'))
+	.pipe(gulp.dest('public'))
+	.pipe(notify({ message: 'Styles task complete' }));
+});
 
-    gulp.task('styles', function() {
-      return gulp.src('assets/sass/kiku.scss')
-      .pipe(sourcemaps.init())
-    	.pipe(sass({ style: 'compressed' }))
-      .pipe(minifyCSS())
-      .pipe(rename('kiku.css'))
-      .pipe(sourcemaps.write('.'))
-    	.pipe(gulp.dest('public'))
-    	.pipe(notify({ message: 'Styles task complete' }));
-    });
+gulp.task('node', function(){
+  nodemon({
+      script: 'bin/www'
+    , ext: 'js html'
+    , env: { 'NODE_ENV': 'development' }
+    })
+});
 
-// Concatenate & Minify JS
 gulp.task('scripts', function() {
 	return gulp.src('assets/javascripts/*.js')
 		.pipe(concat('kiku.js'))
@@ -42,7 +48,8 @@ gulp.task('watch', function() {
   // Watch .js files
   gulp.watch('assets/javascripts/**/*.js', ['scripts']);
 
+
 });
 
-gulp.task('default', ['styles', 'scripts', 'watch']);
+gulp.task('default', ['styles', 'scripts', 'watch','node']);
 gulp.task ('build', [ 'styles', 'scripts' ]);
