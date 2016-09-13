@@ -89,6 +89,7 @@ module.exports = {
     if (played[color].length === card.number - 1) {
       // success!
       played[color].push(card);
+      gameState.score++;
     }
     else {
       // fail!

@@ -15,7 +15,8 @@ router.get('/reset', function(req, res, next) {
   // reset the game state
   req.session.destroy();
   console.log(req.session);
-  res.send('Reset the game state');
+  res.redirect('/');
+  // res.send('Reset the game state');
 });
 
 router.get('/state', function(req, res, next) {
@@ -45,8 +46,19 @@ router.get('/:actionKey/:handKey/:cardIndex', function(req, res, next) {
   }
   else {
     gameActions[actionKey](gameState, handKey, cardIndex);
-    res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
+    res.redirect('/');
+    // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
   }
 });
+
+/* Take POST from form and redirect as appropriate */
+router.post('/', function(req, res, next) {
+  var cardIndex = req.body.card.split(',')[0],
+      handKey = req.body.card.split(',')[1],
+      actionKey = req.body.action;
+  
+      res.redirect('/gameplay/'+actionKey+'/'+handKey+'/'+cardIndex);
+});
+
 
 module.exports = router;
