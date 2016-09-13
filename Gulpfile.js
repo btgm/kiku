@@ -2,7 +2,6 @@
 
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
-    jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
     imagemin = require('gulp-imagemin'),
     rename = require('gulp-rename'),
