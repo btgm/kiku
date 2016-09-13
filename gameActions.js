@@ -45,6 +45,7 @@ module.exports = {
       computer: computer,
       discard: [],
       deck: deck,
+      log: [] 
     };
 
     return gameState;
@@ -72,6 +73,8 @@ module.exports = {
     }else if (gameState.computer.length === 4 && gameState.player.length === 4) {
       gameState.gameFinished = false;
     }
+    
+    gameState.log.push(handKey + ' discarded card #' + cardIndex);
   },
 
   'play': function(gameState, handKey, cardIndex) {
@@ -90,6 +93,7 @@ module.exports = {
       // success!
       played[color].push(card);
       gameState.score++;
+      gameState.log.push(handKey + ' played card #' + cardIndex + ' successfully');
     }
     else {
       // fail!
@@ -98,11 +102,13 @@ module.exports = {
 
       if (gameState.fuseTokens < 1) {
         gameState.gameFinished = true;
+        gameState.log.push(handKey + ' played card #' + cardIndex + ' unsuccessfully and ENDED THE GAME');
         return;
       }
 
       // put into the discard pile
       gameState.discard.push(card);
+      gameState.log.push(handKey + ' played card #' + cardIndex + ' unsuccessfully');      
     }
 
     // deal card from top of deck to replace in hand
@@ -127,7 +133,8 @@ module.exports = {
         hand[h].isNumberKnown = true;
       }
     }
-
+    
+    gameState.log.push(handKey + ' was informed about all their ' + number + ' cards');
     gameState.timeTokens--;
   },
 
@@ -146,6 +153,7 @@ module.exports = {
       }
     }
 
+    gameState.log.push(handKey + ' was informed about all their ' + color + ' cards');
     gameState.timeTokens--;
   },
 };

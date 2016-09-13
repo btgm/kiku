@@ -19,6 +19,12 @@
   
   <h1>{{ title }}</h1>
   
+  <ol>
+    {% for action in gameState.log %}
+    <li>{{ action }}</li>
+    {% endfor %}
+  </ol>
+  
   <form action='/gameplay' method='post'>
     {% for card in gameState.computer %}
       <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }}'>{{ card.color }} {{ card.number }}</button>

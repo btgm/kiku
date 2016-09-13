@@ -4,6 +4,8 @@ var gameActions = require('../gameActions.js');
 
 var HANDS = ['player', 'computer'];
 var ACTIONS = ['play', 'discard', 'tellNumber', 'tellColor'];
+var PLAYERACTIONS = ['play', 'discard' ];
+var COMPUTERACTIONS = ['tellNumber', 'tellColor'];
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -31,21 +33,37 @@ router.get('/state', function(req, res, next) {
 });
 
 
-router.get('/:actionKey/:handKey/:cardIndex', function(req, res, next) {
+router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) {
+  console.log(req.path)
   // reset the game state
   var gameState = req.session.gameState;
   var actionKey = req.params.actionKey;
   var handKey = req.params.handKey;
   var cardIndex = req.params.cardIndex*1;
-
+  var isPost = (typeof req.params.isPost == 'undefined') ? false : true;
+  
+  
   if (ACTIONS.indexOf(actionKey) < 0 ) {
     res.send('Unknown action: '+handKey);
   }
   else if (HANDS.indexOf(handKey) < 0) {
     res.send('Unknown hand: '+handKey);
   }
+  else if (isPost && handKey == 'player' && PLAYERACTIONS.indexOf(actionKey) < 0 ) {
+    res.send('Illegal move by player on own hand.');    
+  }
+  else if (isPost && handKey == 'computer' && COMPUTERACTIONS.indexOf(actionKey) < 0 ) {
+    res.send('Illegal move by player on computer hand.');    
+  }
   else {
     gameActions[actionKey](gameState, handKey, cardIndex);
+    
+    // if it's a post it was the player's play
+    if (isPost) {
+      // computer makes a play  
+      gameActions['discard'](gameState, 'computer', 0);
+    }
+    
     res.redirect('/');
     // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
   }
@@ -57,7 +75,7 @@ router.post('/', function(req, res, next) {
       handKey = req.body.card.split(',')[1],
       actionKey = req.body.action;
   
-      res.redirect('/gameplay/'+actionKey+'/'+handKey+'/'+cardIndex);
+      res.redirect('/gameplay/'+actionKey+'/'+handKey+'/'+cardIndex+'/post');
 });
 
 
