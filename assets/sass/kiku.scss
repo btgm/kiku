@@ -146,24 +146,29 @@ input[type=radio] {
       transform:scale(.75);
     }    
   }
-  
-  // cards go other direction for compute rhand
-  &#computer-hand .card:hover {
-    transform: translate3d(0,20%,0) rotate(0deg);    
-  }
-  
+    
   .card {
-    &.number-known-true {
-      &:before {
-        content:"#️⃣";
-      }      
+    &.number-known-true  {
+      .info-number { display:inline-block ;}
     }
     &.color-known-true {
-      &:before {
-        content:"🎨";
-      }
+      .info-color { display:inline-block;}
+    }
+    
+    .info {
+      position:absolute;
+      bottom:0;
+      text-align:center;
+      left:0;
+      font-size:1rem;
+      transform: translate3d(0,100%,0);
+      width:100%;
+    }
+    .info-number,.info-color {
+      display:none;  
     }
   }
+  
 }
 
 .card {
