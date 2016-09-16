@@ -35,6 +35,12 @@
 
 
 
+/***************
+
+ Global Resets 
+
+****************/
+
 label {
   display:block;
   cursor:pointer;
@@ -87,11 +93,33 @@ input[type=radio] {
 }
 
 
-/******
+/********************
+
+ General
+
+*********************/
+
+#title {
+  font-family:Monaco,Consolas,Courier New, monospace;
+  text-transform:uppercase;
+  text-align:center;
+  font-size:3em;
+  
+  &:before {
+    content:"👾 ";
+  }
+  &:after {
+    content:" 👾";
+  }
+}
+
+
+
+/********************
 
  Cards, Hands, Deck
 
-******/
+*********************/
 
 #deck {
   list-style:none;
@@ -123,6 +151,19 @@ input[type=radio] {
   &#computer-hand .card:hover {
     transform: translate3d(0,20%,0) rotate(0deg);    
   }
+  
+  .card {
+    &.number-known-true {
+      &:before {
+        content:"#️⃣";
+      }      
+    }
+    &.color-known-true {
+      &:before {
+        content:"🎨";
+      }
+    }
+  }
 }
 
 .card {
@@ -137,6 +178,7 @@ input[type=radio] {
   margin:0 -10px 0 0;
   text-shadow: -1px -1px 0px rgba(255,255,255,.25),1px 1px 0px rgba(255,255,255,.5);
   font-size:2.5rem;
+  font-family:Courier;
   
   &:nth-of-type(2n+1) {    
     transform: translate3d(0,2%,0) rotate(2deg);

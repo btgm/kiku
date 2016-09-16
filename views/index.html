@@ -21,9 +21,12 @@
   <form action='/gameplay' method='post'>
     <div id="hand-computer" class="hand">
     {% for card in gameState.computer %}
-      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>👽</button>
+      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
+        👽
+        <span class="info"></span>  
         <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
         <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
+      </button>
     {% endfor %}
     </div>
     
@@ -64,9 +67,12 @@
 
     <div id="hand-player" class="hand">
     {% for card in gameState.player %}
-      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>📡</button>
-      <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
-      <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
+      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
+        📡
+        <span class="info"></span>  
+        <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
+        <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>        
+      </button>
     {% endfor %}
     </div>
     
