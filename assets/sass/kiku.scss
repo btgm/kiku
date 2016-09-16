@@ -135,8 +135,10 @@ input[type=radio] {
   }
 }
 
-.hand {
+ .hand{
   text-align:center;
+  list-style:none;
+  padding:0;
   
   // hover over hand, specifically card
   &:hover {
@@ -167,11 +169,25 @@ input[type=radio] {
     .info-number,.info-color {
       display:none;  
     }
+  } 
+}
+
+#hand-discard {
+  text-align:left;
+  .card {
+    transform:scale(.85);
   }
-  
+  &:hover {
+    .card:not(:hover),.card:hover {
+      -webkit-filter: none;
+      color:#000;
+//      transform:none;
+    }        
+  }
 }
 
 .card {
+  display:inline-block;
   width:125px;
   height:175px;
   border-radius:6px;

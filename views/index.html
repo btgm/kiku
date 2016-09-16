@@ -87,10 +87,10 @@
   
   <h2>Discard Pile</h2>
   
-  <ul>
+  <ul id='hand-discard' class='hand'>
     {% for card in gameState.discard %}
-      <li class='card'>
-        {{ card.color }} {{ card.number }}
+      <li class='card color-{{ card.color }} number-{{ card.number }}'>
+        
       </li>  
     {% endfor %}  
   </ul>
