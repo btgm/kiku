@@ -19,7 +19,7 @@
   {% else %}
       
   <form action='/gameplay' method='post'>
-    <div id="hand-computer" class="hand">
+    <div id="hand-computer" class="hand playable-hand">
     {% for card in gameState.computer %}
       <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
         👽
@@ -43,23 +43,22 @@
     
     <h2>Played</h2>
     
-    <ul>
+    <ul id="played-cards" class='hand'>
     {% for color,cards in gameState.played %}
       <li>{{ color }}
         <ul>
           {% for card in cards %}
-          <li>{{ card.color }} {{ card.number }}</li>
+      <li class='card color-{{ card.color }} number-{{ card.number }}'>
+        <span class='card-decoration'>
+          📡<span class='heart'></span>👽      
+        </span>
+      </li>  
           {% endfor %}
         </ul>
       </li>      
     {% endfor %}
     </ul>
-    
-    <ul id="deck">
-      {% for card in gameState.deck %}
-      <li class='card cardback stars'></li>
-      {% endfor %}
-    </ul>
+
     
     <hr>
     
@@ -68,7 +67,7 @@
       <label for='play4'><input type="radio" id="play4" name="action" value='play' checked> Play a card</label>
     </div>
 
-    <div id="hand-player" class="hand">
+    <div id="hand-player" class="hand playable-hand">
     {% for card in gameState.player %}
       <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
         📡
@@ -89,9 +88,7 @@
   
   <ul id='hand-discard' class='hand'>
     {% for card in gameState.discard %}
-      <li class='card color-{{ card.color }} number-{{ card.number }}'>
-        
-      </li>  
+      <li class='card color-{{ card.color }} number-{{ card.number }}'></li>  
     {% endfor %}  
   </ul>
   

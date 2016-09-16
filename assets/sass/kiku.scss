@@ -32,6 +32,11 @@
   background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);  
 }
 
+@mixin heart-emoji($emoji) {
+  .heart:before {
+    content:$emoji;
+  }  
+}
 
 
 
@@ -135,15 +140,15 @@ input[type=radio] {
   }
 }
 
- .hand{
+ .hand {
   text-align:center;
   list-style:none;
   padding:0;
   
   // hover over hand, specifically card
-  &:hover {
+  &.playable-hand:hover {
     .card:not(:hover) {
-      -webkit-filter: grayscale(1);
+      -webkit-filter: grayscale(.75);
       color:#aaa;
       transform:scale(.75);
     }    
@@ -237,11 +242,42 @@ input[type=radio] {
   &.number-5 {  @include number("5");  }
 }
 
-
 .cardback {
 background:#333;  
 }
 
+
+#played-cards {
+  float:left;
+  width:100%;
+  clear:both;
+  margin-bottom:140px;
+   
+  & > li {
+    float:left;
+    width:20%;
+  }  
+  
+  list-style:none; 
+  .card { 
+    margin-bottom:-65%;
+  }
+  
+  .card-decoration {
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate3d(-50%,-50%,0) scale(.75);
+  }
+  .card {
+    &.color-blue { @include heart-emoji('💙') }
+    &.color-green { @include heart-emoji('💚') }
+    &.color-white { @include heart-emoji('💟') }
+    &.color-yellow { @include heart-emoji('💛') }
+    &.color-red { @include heart-emoji('❤️') }
+
+  }
+}
 
 /******
 
