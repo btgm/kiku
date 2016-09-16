@@ -4,8 +4,10 @@
 
 <div class="container">
   
+  <h1 id="title">{{ title }}</h1>
+  
   {% if gameState.gameFinished %}
-
+    
     <h1>The game has come to an end!</h1>
     <p>
       Your score: {{ gameState.score }} out of a possible 25.
@@ -15,27 +17,21 @@
     </p>
 
   {% else %}
-  
-  
-  <h1>{{ title }}</h1>
-  
-  <ol>
-    {% for action in gameState.log %}
-    <li>{{ action }}</li>
-    {% endfor %}
-  </ol>
-  
+      
   <form action='/gameplay' method='post'>
+    <div id="hand-computer" class="hand">
     {% for card in gameState.computer %}
-      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }}'>{{ card.color }} {{ card.number }}</button>
+      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>👽</button>
         <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
         <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
-      
-      
     {% endfor %}
+    </div>
     
-    <label for='play1'><input type="radio" id="play1" name="action" value='tellColor'> Tell about color</label>
-    <label for='play2'><input type="radio" id="play2" name="action" value='tellNumber'> Tell about number</label>
+    
+    <div class='label-container'>
+      <label for='play1'><input type="radio" id="play1" name="action" value='tellColor'> Tell about color</label>
+      <label for='play2'><input type="radio" id="play2" name="action" value='tellNumber'> Tell about number</label>
+    </div>
 
     <hr>
     
@@ -53,17 +49,26 @@
     {% endfor %}
     </ul>
     
+    <ul id="deck">
+      {% for card in gameState.deck %}
+      <li class='card cardback stars'></li>
+      {% endfor %}
+    </ul>
+    
     <hr>
     
-    <label for='play3'><input type="radio" id="play3" name="action" value='discard'> Discard a card</label>
-    <label for='play4'><input type="radio" id="play4" name="action" value='play' checked> Play a card</label>
+    <div class='label-container'>
+      <label for='play3'><input type="radio" id="play3" name="action" value='discard'> Discard a card</label>
+      <label for='play4'><input type="radio" id="play4" name="action" value='play' checked> Play a card</label>
+    </div>
 
-
+    <div id="hand-player" class="hand">
     {% for card in gameState.player %}
-      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }}'>{{ card.color }} {{ card.number }}</button>
+      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>📡</button>
       <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
       <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
     {% endfor %}
+    </div>
     
   </form>
   
@@ -76,6 +81,15 @@
       </li>  
     {% endfor %}  
   </ul>
+  
+  <h2>Game Log</h2>
+  
+  <ol>
+    {% for action in gameState.log %}
+    <li>{{ action }}</li>
+    {% endfor %}
+  </ol>
+  
 
 {% endif %}
 
