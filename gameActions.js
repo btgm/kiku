@@ -166,6 +166,7 @@ module.exports = {
     
     for (var c=0; c < hand.length; c++) {
       hand[c].canDiscard = this.canDiscard(gameState, handKey, c);            
+      hand[c].canPlay = this.canPlay(gameState, handKey, c);            
     }
     
   },
@@ -173,46 +174,92 @@ module.exports = {
     var hand = gameState[handKey];
     var card = hand[cardIndex];
     
+    // all possibilities
+    var possibilities = [];
+    for (var c=0; c < colors.length; c++) {
+      var color = colors[c];
+      for (var n=0; n < numbers.length; n++) {
+          var number = numbers[n];
+          possibilities.push({color: color, number: number});
+      }
+    }
+
+    // eliminate wrong numbers
+    if (card.isNumberKnown) {
+      for (var p = 0; p < possibilities.length; p++) {
+        if (possibilities[p].number != card.number) {
+          possibilities.splice(p, 1);
+          p--;
+        }
+      }
+    }
+
+    // eliminate wrong colors
+    if (card.isColorKnown) {
+      for (var p = 0; p < possibilities.length; p++) {
+        if (possibilities[p].color != card.color) {
+          possibilities.splice(p, 1);
+          p--;
+        }
+      }
+    }
+
+    // eliminate played cards
+    for (var color in gameState.played) {
+      for (var number in gameState.played[color]) {
+        for (var p = 0; p < possibilities.length; p++) {
+          if (number == possibilities[p].number && color == possibilities[p].color) {
+            possibilities.splice(p, 1);
+            p--;
+            break;
+          }
+        }
+      }
+    }
+
+    // remove players cards
+    for (var i = 0; i < gameState.player.length; i++) {
+      for (var p = 0; p < possibilities.length; p++) {
+        if (gameState.player[i].number === possibilities[p].number && gameState.player[i].color === possibilities[p].color) {
+          possibilities.splice(p, 1);
+          p--;
+          break;
+        }
+      }
+    }
+
+    // remove discarded cards
+    for (var i = 0; i < gameState.discard.length; i++) {
+      for (var p = 0; p < possibilities.length; p++) {
+        if (gameState.discard[i].number === possibilities[p].number && gameState.discard[i].color === possibilities[p].color) {
+          possibilities.splice(p, 1);
+          p--;
+          break;
+        }
+      }
+    }
+
+    // of those possibilities, are any of these cards that _haven't_ been played
+    // but are the last of their type?
+    var plays = [];
+    for (var p = 0; p < possibilities.length; p++) {
+      // can be played?
+      if (possibilities[p].number == 1+gameState.played[color].length) {
+        plays.push(possibilities[p]);
+      }
+    }
+    console.log("====================")
+    console.log(possibilities)
+    console.log("-----------------------------")
+    console.log(plays)
+    console.log("====================")
+    return Math.round(plays.length/possibilities.length*100)/100;    
   },
   
   'canDiscard': function(gameState, handKey, cardIndex) {
     var hand = gameState[handKey];
     var card = hand[cardIndex];
     var known_cards = [];
-
-    var probability = 0;
-    // Check for 100% safe to discard scenarios            
-    for (color in gameState.played) {      
-      // if the stack is done it's safe to discard
-      if (card.isColorKnown && card.color == color && gameState.played[color].length == 5 ) return 2                
-      for (var c=0; c < gameState.played[color].length; c++){
-        var candidate = gameState.played[color][c];        
-        // if the card has been played it's safe to discard
-        if (card.isColorKnown && card.isNumberKnown && card.color == candidate.color && card.number == candidate.number) {
-          console.log(card.color,card.number,candidate.color,candidate.number);
-          return 2;
-        }           
-      }
-    }
-    
-    // Check if all the numbers have been played
-    if ( !card.isColorKnown && card.isNumberKnown) {
-      var cards_matching_number = 0;
-      for (color in gameState.played) {      
-        for (var c=0; c < gameState.played[color]; c++) {
-          var candidate = gameState.played[color][c];
-          if (card.number == candidate.number) cards_matching_number++
-        }
-        if (cards_matching_number == 5) return 2;
-      }      
-    }    
-    
-  
-    for (var c=0; c < gameState.player; c++) {
-      var candidate = gameState.player[c];
-      // If the card is in the other players hand, it's safe
-      if (card.isColorKnown && card.isNumberKnown &&  card.color == candidate.color && card.number == candidate.number) return 2;
-    }          
     
     // all possibilities
     var possibilities = [];
@@ -279,9 +326,6 @@ module.exports = {
       }
     }
 
-    console.log(handKey, cardIndex)
-    console.log(possibilities);
-
     // of those possibilities, are any of these cards that _haven't_ been played
     // but are the last of their type?
     var badPossibilities = [];
@@ -314,8 +358,7 @@ module.exports = {
       }
     }
      
-    console.log(badPossibilities.length, possibilities.length);    
-    return 1-Math.round(badPossibilities.length/possibilities.length*100)/100;
+    return Math.round(100-badPossibilities.length/possibilities.length*100)/100;
   },
   
 };
