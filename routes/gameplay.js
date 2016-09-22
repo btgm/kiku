@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 router.get('/reset', function(req, res, next) {
   // reset the game state
   req.session.destroy();
-  console.log(req.session);
+  // console.log(req.session);
   res.redirect('/');
   // res.send('Reset the game state');
 });
@@ -34,7 +34,7 @@ router.get('/state', function(req, res, next) {
 
 
 router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) {
-  console.log(req.path)
+  // console.log(req.path)
   // reset the game state
   var gameState = req.session.gameState;
   var actionKey = req.params.actionKey;
@@ -60,10 +60,11 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
     
     // if it's a post it was the player's play
     if (isPost) {
-      // computer makes a play  
-      gameActions['discard'](gameState, 'computer', 0);
+      // computer makes a play 
+      // gameActions['discard'](gameState, 'computer', 0);
     }
-    
+
+    gameActions['calculateHand'](gameState, 'computer');           
     res.redirect('/');
     // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
   }

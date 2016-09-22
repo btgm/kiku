@@ -12,7 +12,7 @@ var GameState = function(req, res, next){
   if (typeof req.session.gameState != 'undefined' ) {
 
     console.log("Game in session!");
-    console.log(req.session.gameState);
+    // console.log(req.session.gameState);
     // playing the game
 
   }else{
