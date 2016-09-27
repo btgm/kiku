@@ -58,13 +58,19 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
   else {
     gameActions[actionKey](gameState, handKey, cardIndex);
     
-    // if it's a post it was the player's play
+    gameActions['calculateBothHands'](gameState);
+    
+    // if it's a post it was the player's play    
     if (isPost) {
       // computer makes a play 
+      
+      if (gameState.computerHand.playability > gameState.playerHand.playability) {
+        
+      }
+            
       // gameActions['discard'](gameState, 'computer', 0);
     }
 
-    gameActions['calculateBothHands'](gameState);
     res.redirect('/');
     // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
   }

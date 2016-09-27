@@ -168,10 +168,19 @@ module.exports = {
 
   'calculateHand': function(gameState, handKey) {
     var hand = gameState[handKey];
+    var playability = 0;
+    var discardability = 0;
 
     for (var c=0; c < hand.length; c++) {
       hand[c].canDiscard = this.canDiscard(gameState, handKey, c);
       hand[c].canPlay = this.canPlay(gameState, handKey, c);
+      playability += hand[c].canPlay;
+      discardability += hand[c].canDiscard;      
+    }
+    
+    gameState[handKey + 'Hand'] = {
+      "playability": playability,    
+      "discardability": discardability
     }
 
   },
