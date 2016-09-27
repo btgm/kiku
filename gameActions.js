@@ -51,6 +51,7 @@ module.exports = {
     };
     
     this.calculateHand(gameState, 'computer');
+    this.calculateHand(gameState, 'player');
     
     return gameState;
   },
@@ -172,6 +173,7 @@ module.exports = {
   },
   'canPlay': function(gameState, handKey, cardIndex) {
     var hand = gameState[handKey];
+    var oppositeHandKey = (handKey == 'computer') ? 'player' : 'computer';    
     var card = hand[cardIndex];
     
     // all possibilities
@@ -218,10 +220,10 @@ module.exports = {
       }
     }
 
-    // remove players cards
-    for (var i = 0; i < gameState.player.length; i++) {
+    // remove opposite hand cards
+    for (var i = 0; i < gameState[oppositeHandKey].length; i++) {
       for (var p = 0; p < possibilities.length; p++) {
-        if (gameState.player[i].number === possibilities[p].number && gameState.player[i].color === possibilities[p].color) {
+        if (gameState[oppositeHandKey][i].number === possibilities[p].number && gameState[oppositeHandKey][i].color === possibilities[p].color) {
           possibilities.splice(p, 1);
           p--;
           break;
@@ -257,6 +259,7 @@ module.exports = {
   
   'canDiscard': function(gameState, handKey, cardIndex) {
     var hand = gameState[handKey];
+    var oppositeHandKey = (handKey == 'computer') ? 'player' : 'computer';
     var card = hand[cardIndex];
     var known_cards = [];
     
@@ -304,10 +307,10 @@ module.exports = {
       }
     }
 
-    // remove players cards
-    for (var i = 0; i < gameState.player.length; i++) {
+    // remove opposite hand cards
+    for (var i = 0; i < gameState[oppositeHandKey].length; i++) {
       for (var p = 0; p < possibilities.length; p++) {
-        if (gameState.player[i].number === possibilities[p].number && gameState.player[i].color === possibilities[p].color) {
+        if (gameState[oppositeHandKey][i].number === possibilities[p].number && gameState[oppositeHandKey][i].color === possibilities[p].color) {
           possibilities.splice(p, 1);
           p--;
           break;

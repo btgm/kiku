@@ -75,6 +75,8 @@
       <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
         📡
         <div class="info">
+          <span>P:{{ card.canPlay }}</span>,
+          <span>D:{{ card.canDiscard }}</span>          
           <span class="info-color">🎨</span>  
           <span class="info-number">🔢</span>  
           <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
