@@ -41,8 +41,8 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
   var handKey = req.params.handKey;
   var cardIndex = req.params.cardIndex*1;
   var isPost = (typeof req.params.isPost == 'undefined') ? false : true;
-  
-  
+
+
   if (ACTIONS.indexOf(actionKey) < 0 ) {
     res.send('Unknown action: '+handKey);
   }
@@ -50,26 +50,43 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
     res.send('Unknown hand: '+handKey);
   }
   else if (isPost && handKey == 'player' && PLAYERACTIONS.indexOf(actionKey) < 0 ) {
-    res.send('Illegal move by player on own hand.');    
+    res.send('Illegal move by player on own hand.');
   }
   else if (isPost && handKey == 'computer' && COMPUTERACTIONS.indexOf(actionKey) < 0 ) {
-    res.send('Illegal move by player on computer hand.');    
+    res.send('Illegal move by player on computer hand.');
   }
   else {
     gameActions[actionKey](gameState, handKey, cardIndex);
-    
+
     gameActions['calculateBothHands'](gameState);
-    
-    // if it's a post it was the player's play    
+
+    // if it's a post it was the player's play
     if (isPost) {
-      // computer makes a play 
-      
-      if (gameState.computerHand.playability > gameState.playerHand.playability) {
-        
+      // computer makes a play
+      //
+      var computerBestPlay = gameActions['calculateBestPlay'](gameState, 'computer');
+      var tellNumberBestPlay = gameActions['calculateTellBestPlay'](gameState, 'tellNumber');
+      var tellColorBestPlay = gameActions['calculateTellBestPlay'](gameState, 'tellColor');
+
+      var bestPlay = computerBestPlay;
+
+      if (tellNumberBestPlay.score > bestPlay.score) {
+        bestPlay = tellNumberBestPlay;
       }
-            
-      // gameActions['discard'](gameState, 'computer', 0);
+      if (tellColorBestPlay.score > bestPlay.score) {
+        bestPlay = tellColorBestPlay;
+      }
+      console.log('computerBestPlay', computerBestPlay);
+      console.log('tellNumberBestPlay', tellNumberBestPlay);
+      console.log('tellColorBestPlay', tellColorBestPlay);
+
+      var bestPlay = computerBestPlay;
+
+      gameActions[bestPlay.action](gameState, bestPlay.handKey, bestPlay.cardIndex);
+
     }
+
+    gameActions['calculateBothHands'](gameState);
 
     res.redirect('/');
     // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
@@ -81,7 +98,7 @@ router.post('/', function(req, res, next) {
   var cardIndex = req.body.card.split(',')[0],
       handKey = req.body.card.split(',')[1],
       actionKey = req.body.action;
-  
+
       res.redirect('/gameplay/'+actionKey+'/'+handKey+'/'+cardIndex+'/post');
 });
 

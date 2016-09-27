@@ -161,6 +161,48 @@ module.exports = {
     gameState.timeTokens--;
   },
 
+  'calculateBestPlay': function(gameState, handKey) {
+    var score = -1;
+    var action;
+    var cardIndex;
+
+    for (var c = 0; c < gameState[handKey].length; c++) {
+      if (gameState[handKey][c].canPlay > score) {
+        score = gameState[handKey][c].canPlay;
+        action = 'play';
+        cardIndex = c;
+      }
+    }
+
+    for (var c = 0; c < gameState[handKey].length; c++) {
+      if (gameState[handKey][c].canDiscard > score) {
+        score = gameState[handKey][c].canDiscard;
+        action = 'discard';
+        cardIndex = c;
+      }
+    }
+
+    return { score: score, action: action, cardIndex: cardIndex, handKey: handKey };
+  },
+
+  'calculateTellBestPlay': function(gameState, actionKey) {
+    var score = -1;
+    var bestPlay;
+
+    for (var c = 0; c < gameState.player.length; c++) {
+      var cloned = JSON.parse(JSON.stringify(gameState));
+      this[actionKey](cloned, 'player', c);
+      var play = this.calculateBestPlay(cloned, 'player');
+
+      if (play.score > score) {
+        score = play.score;
+        bestPlay = play;
+      }
+    }
+
+    return bestPlay;
+  },
+
   'calculateBothHands': function(gameState) {
     this.calculateHand(gameState, 'computer');
     this.calculateHand(gameState, 'player');
@@ -193,13 +235,6 @@ module.exports = {
       if (possibilities[p].number == 1+gameState.played[possibilities[p].color].length) {
         plays.push(possibilities[p]);
       }
-    }
-    if (handKey === 'player') {
-    console.log("====================")
-    console.log(possibilities)
-    console.log("-----------------------------")
-    console.log(plays)
-    console.log("====================")
     }
     return Math.round(plays.length/possibilities.length*100)/100;
   },
