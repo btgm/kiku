@@ -206,7 +206,8 @@ module.exports = {
 
     // eliminate played cards
     for (var color in gameState.played) {
-      for (var number in gameState.played[color]) {
+      for (var i = 0; i < gameState.played[color].length; i++) {
+        var number = gameState.played[color][i].number;
         for (var p = 0; p < possibilities.length; p++) {
           if (number == possibilities[p].number && color == possibilities[p].color) {
             possibilities.splice(p, 1);
@@ -239,12 +240,10 @@ module.exports = {
       }
     }
 
-    // of those possibilities, are any of these cards that _haven't_ been played
-    // but are the last of their type?
     var plays = [];
     for (var p = 0; p < possibilities.length; p++) {
       // can be played?
-      if (possibilities[p].number == 1+gameState.played[color].length) {
+      if (possibilities[p].number == 1+gameState.played[possibilities[p].color].length) {
         plays.push(possibilities[p]);
       }
     }
@@ -293,7 +292,8 @@ module.exports = {
 
     // eliminate played cards
     for (var color in gameState.played) {
-      for (var number in gameState.played[color]) {
+      for (var i = 0; i < gameState.played[color].length; i++) {
+        var number = gameState.played[color][i].number;
         for (var p = 0; p < possibilities.length; p++) {
           if (number === possibilities[p].number && color === possibilities[p].color) {
             possibilities.splice(p, 1);
@@ -333,7 +333,8 @@ module.exports = {
       // has been played?
       var played = false;
       for (var color in gameState.played) {
-        for (var number in gameState.played[color]) {
+        for (var i = 0; i < gameState.played[color].length; i++) {
+          var number = gameState.played[color][i].number;
           if (possibilities[p].number == number && possibilities[p].color == color) {
             played = true;
           }
