@@ -64,7 +64,7 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
       // gameActions['discard'](gameState, 'computer', 0);
     }
 
-    gameActions['calculateHand'](gameState, 'computer');           
+    gameActions['calculateBothHands'](gameState);
     res.redirect('/');
     // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
   }
