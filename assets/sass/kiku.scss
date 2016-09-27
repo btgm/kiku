@@ -7,29 +7,36 @@
 @import 'normalize';
 
 
-@mixin number($number) {
-  &:after,&:before {
-    content:$number;
-    display:inline-block;
-    font-size:2.5rem;
-    position: absolute;
-    padding:.25em;
-  }  
+@mixin number($number) {  
+  &.number-known-true, &.number-show {    
+    &:after,&:before {
+      content:$number;
+      display:inline-block;
+      font-size:5.5vw;
+      position: absolute;
+      padding:.25em;
+    }  
   
-  &:after {
-    bottom:0;
-    right:0;
-    transform: rotate(180deg);
-  }
-  &:before {
-    top:0;
-    left:0;
-  }    
+    &:after {
+      bottom:0;
+      right:0;
+      transform: rotate(180deg);
+    }
+    &:before {
+      top:0;
+      left:0;
+    } 
+  }   
 }
 
 @mixin card-color($color, $color2:darken($color,5%)) {
-  background:$color;
-  background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);  
+  -webkit-filter: grayscale(1);
+  background: linear-gradient(135deg, #eee, #eee 50%, #ddd 50%, #ddd);      
+  &.color-known-true, &.color-show {
+    -webkit-filter: grayscale(0);
+    background:$color;
+    background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);      
+  }
 }
 
 @mixin heart-emoji($emoji) {
@@ -52,7 +59,7 @@ label {
 }
 
 .container {
-  width: 920px;
+  max-width: 920px;
   margin:0 auto;
 }
 
@@ -193,8 +200,8 @@ input[type=radio] {
 
 .card {
   display:inline-block;
-  width:125px;
-  height:175px;
+  width:18.5vw;
+  height:25.9vw;
   border-radius:6px;
   border: rgba(0,0,0,.25) solid 1px;
   box-shadow:-1px 2px 2px rgba(0,0,0,.1);
@@ -203,7 +210,7 @@ input[type=radio] {
   position: inline-block;
   margin:0 -10px 0 0;
   text-shadow: -1px -1px 0px rgba(255,255,255,.25),1px 1px 0px rgba(255,255,255,.5);
-  font-size:2.5rem;
+  font-size:7vw;
   font-family:Courier;
   
   &:nth-of-type(2n+1) {    
@@ -240,11 +247,12 @@ input[type=radio] {
   &.number-3 {  @include number("3");  }
   &.number-4 {  @include number("4");  }
   &.number-5 {  @include number("5");  }
+  
+  
+  
+  
 }
 
-.cardback {
-background:#333;  
-}
 
 
 #played-cards {
@@ -275,7 +283,6 @@ background:#333;
     &.color-white { @include heart-emoji('💟') }
     &.color-yellow { @include heart-emoji('💛') }
     &.color-red { @include heart-emoji('❤️') }
-
   }
 }
 
@@ -294,3 +301,6 @@ label  {
   display:inline-block;
 }
 
+.hidden {
+  display:none;
+}

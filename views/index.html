@@ -21,12 +21,12 @@
   <form action='/gameplay' method='post'>
     <div id="hand-computer" class="hand playable-hand">
     {% for card in gameState.computer %}
-      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
+      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-show number-show color-known-{{ card.isColorKnown }} number-known-{{  card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
         👽
         <div class="info">
           
-          <span>P:{{ card.canPlay }}</span>,
-          <span>D:{{ card.canDiscard }}</span>
+          <span class='hidden'>P:{{ card.canPlay }}</span>
+          <span class='hidden'>D:{{ card.canDiscard }}</span>
           <span class="info-color">🎨</span>  
           <span class="info-number">🔢</span>  
           <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
@@ -51,7 +51,7 @@
       <li>{{ color }}
         <ul>
           {% for card in cards %}
-      <li class='card color-{{ card.color }} number-{{ card.number }}'>
+      <li class='card color-{{ card.color }} number-{{ card.number }} color-known-true number-known-true'>
         <span class='card-decoration'>
           📡<span class='heart'></span>👽      
         </span>
@@ -93,7 +93,7 @@
   
   <ul id='hand-discard' class='hand'>
     {% for card in gameState.discard %}
-      <li class='card color-{{ card.color }} number-{{ card.number }}'></li>  
+      <li class='card color-{{ card.color }} number-{{ card.number }} color-known-true number-known-true'></li>  
     {% endfor %}  
   </ul>
   
