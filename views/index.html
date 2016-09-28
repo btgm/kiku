@@ -15,7 +15,9 @@
     {% set fuseTokens = Array(gameState.fuseTokens) %}
     {% for t in fuseTokens %}⭐️{% endfor %}    
     </span>
-    <a href='/gameplay/reset'>Restart Game</a>
+    <a href='/gameplay/reset'>Restart</a>
+    <a href="#" class='js-only'>Discards</a>
+    <a href="#" class='js-only'>Log</a>
     </div>
   </header>
   
@@ -56,17 +58,17 @@
     
   </form>
   
-  <h2>Discard Pile</h2>
-  
-  <ul id='hand-discard' class='hand'>
-    {% include 'templates/discard.html' %}
-  </ul>
-  
-  <h2>Game Log</h2>
-  
-  <ol id='game-log'>
-    {% include 'templates/log.html' %}
-  </ol>
+  <div class='no-js-only'>
+    <h2>Discard Pile</h2>  
+    <ul id='hand-discard' class='hand'>
+      {% include 'templates/discard.html' %}
+    </ul>
+    
+    <h2>Game Log</h2>  
+    <ol id='game-log'>
+      {% include 'templates/log.html' %}
+    </ol>
+  </div>
   
 
 {% endif %}
