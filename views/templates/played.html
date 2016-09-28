@@ -1,4 +1,4 @@
-{% for color,cards in played %}<li class='{{ color }}-played'><span class='sr-only'>{{ color }} cards</span>
+{% for color,cards in gameState.played %}<li class='{{ color }}-played'><span class='sr-only'>{{ color }} cards</span>
   <ul>
     <li class='card  color-known-true number-known-true blank-card'>
       <span class='card-decoration'>
