@@ -1,6 +1,6 @@
 {% for card in gameState.computer %}
   <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-show number-show color-known-{{ card.isColorKnown }} number-known-{{  card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}' draggable='true'>
-    👽
+    <span class='emblem'>👽</span>
     <div class="info">
       
       <span class='hidden'>P:{{ card.canPlay }}</span>

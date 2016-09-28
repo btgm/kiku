@@ -45,6 +45,7 @@ $green: #2ECC40;
     filter: grayscale(0);
     background:$color;
     background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);      
+    .emblem {  animation: colorshift 1s infinite ease-in-out alternate;  }
   }
 }
 
@@ -53,6 +54,24 @@ $green: #2ECC40;
     content:$emoji;
   }  
 }
+
+@keyframes colorshift {
+    0% {
+      filter: hue-rotate(0deg);      
+    }
+    100%{
+      filter: hue-rotate(360deg);
+    }
+  } 
+
+//  @keyframes colorshift-more {
+//      0% {
+//        filter: hue-rotate(0deg);
+//      }
+//      100%{
+//        filter: hue-rotate(45deg);
+//      }
+//    }
 
 /***************
 
