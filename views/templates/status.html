@@ -3,8 +3,10 @@
 {% set timeTokens = Array(gameState.timeTokens) %}
 {% for t in timeTokens %}⌛️{% endfor %}
 </span>
-<span class='game-fuse-tokens game-status-item'>FUSES <span class='sr-only'>{{ gameState.fuseTokens }}</span>
+<span class='game-fuse-tokens game-status-item'>STARS <span class='sr-only'>{{ gameState.fuseTokens }}</span>
 {% set fuseTokens = Array(gameState.fuseTokens) %}
 {% for t in fuseTokens %}⭐️{% endfor %}    
 </span>
-<a href='/gameplay/reset'>Restart Game</a>
+<a href='/gameplay/reset'>Restart</a>
+<a href="#" class='js-only'>Discards</a>
+<a href="#" class='js-only'>Log</a>
