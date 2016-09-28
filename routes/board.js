@@ -26,4 +26,13 @@ router.get('/played', function(req, res, next) {
   });  
 });
 
+router.get('/status', function(req, res, next) {
+  var gameState = req.session.gameState;
+      
+  res.render('templates/status', {
+    gameState: gameState
+  });  
+});
+
+
 module.exports = router;

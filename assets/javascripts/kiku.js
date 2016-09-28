@@ -455,7 +455,7 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
     };          
   }
   
-  function updatePlayedCards(handKey) {
+  function updatePlayedCards() {
     var xhrHandRequest = new XMLHttpRequest();    
     xhrHandRequest.open('GET', '/board/played/');
     xhrHandRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
@@ -466,6 +466,18 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       }
     };          
   }
+
+  function updateGameStatus() {
+    var xhrHandRequest = new XMLHttpRequest();    
+    xhrHandRequest.open('GET', '/board/status/');
+    xhrHandRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhrHandRequest.send();
+    xhrHandRequest.onreadystatechange = function(){
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById('game-status').innerHTML = this.responseText;
+      }
+    };          
+  }
   
 
   // function to update game state and then reset the
@@ -473,11 +485,12 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   function updateGameState() {
     if (this.readyState == 4 && this.status == 200) {
       var gameState = JSON.parse( this.responseText );
-      console.log("Updated game state")
-      console.log( gameState );            
+      // console.log("Updated game state")
+      // console.log( gameState );
       updateHand('computer');      
       updateHand('player');
-      updatePlayedCards();   
+      updatePlayedCards();
+      updateGameStatus();
     }
   }
   
@@ -485,7 +498,7 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   // ajax call to update gamestate
   function handleGamePlay(){
     if (this.readyState == 4 && this.status == 200) {
-      console.log("Ajax call success! Calling game state to update...");
+      // console.log("Ajax call success! Calling game state to update...");
       // var httpRequest2 = new XMLHttpRequest();
       httpRequest.open('GET', '/gameplay/state');
       httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")

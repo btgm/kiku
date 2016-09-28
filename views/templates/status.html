@@ -1,0 +1,10 @@
+<span class='game-score game-status-item'>SCORE  {{ gameState.score }} / 25</span>
+<span class='game-time-tokens game-status-item'>TIME  <span class='sr-only'>{{ gameState.timeTokens }}</span>
+{% set timeTokens = Array(gameState.timeTokens) %}
+{% for t in timeTokens %}⌛️{% endfor %}
+</span>
+<span class='game-fuse-tokens game-status-item'>FUSES <span class='sr-only'>{{ gameState.fuseTokens }}</span>
+{% set fuseTokens = Array(gameState.fuseTokens) %}
+{% for t in fuseTokens %}⭐️{% endfor %}    
+</span>
+<a href='/gameplay/reset'>Restart Game</a>

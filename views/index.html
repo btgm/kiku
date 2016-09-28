@@ -7,11 +7,11 @@
     <h1 id="title">{{ title }}</h1>
     <div id="game-status">
       <span class='game-score game-status-item'>SCORE  {{ gameState.score }} / 25</span>
-      <span class='game-score game-status-item'>TIME  <span class='sr-only'>{{ gameState.timeTokens }}</span>
+      <span class='game-time-tokens game-status-item'>TIME  <span class='sr-only'>{{ gameState.timeTokens }}</span>
       {% set timeTokens = Array(gameState.timeTokens) %}
       {% for t in timeTokens %}⌛️{% endfor %}
     </span>
-      <span class='game-score game-status-item'>FUSES <span class='sr-only'>{{ gameState.fuseTokens }}</span>
+      <span class='game-fuse-tokens game-status-item'>FUSES <span class='sr-only'>{{ gameState.fuseTokens }}</span>
     {% set fuseTokens = Array(gameState.fuseTokens) %}
     {% for t in fuseTokens %}⭐️{% endfor %}    
     </span>
@@ -55,7 +55,7 @@
     </div>
     
     <h2 class='sr-only'>Played Cards</h2>    
-      <ul id="played-cards" class='hnd'>
+      <ul id="played-cards">
       {% for color,cards in gameState.played %}<li class='{{ color }}-played'><span class='sr-only'>{{ color }} cards</span>
           <ul>
             <li class='card  color-known-true number-known-true blank-card'>
