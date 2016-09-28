@@ -438,13 +438,34 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       }
   });
   
-
-  httpRequest.onreadystatechange = alertContents;
-      
-  function alertContents() {
-    console.log(httpRequest);
+  // update game state
+  httpRequest.onreadystatechange = handleGamePlay;
+  
+  
+  // function to update game state and then reset the
+  // ready function to react after the play is made  
+  function updateGameState() {
+    if (this.readyState == 4 && this.status == 200) {
+      var gameState = JSON.parse( this.responseText );
+      console.log("Updated game state")
+      console.log( gameState );
+      httpRequest.onreadystatechange = handleGamePlay;
+    }
   }
-        
+  
+  // after the POST request for a play is made do another
+  // ajax call to update gamestate
+  function handleGamePlay(){
+    if (this.readyState == 4 && this.status == 200) {
+      console.log("Ajax call success! Calling game state to update...");
+      // var httpRequest2 = new XMLHttpRequest();
+      httpRequest.open('GET', '/gameplay/state');
+      httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+      httpRequest.send();
+      httpRequest.onreadystatechange = updateGameState;      
+    }
+  };
+      
   // ajax
   form.addEventListener('submit', function(e){
     var action = document.querySelector('input:checked').value;
