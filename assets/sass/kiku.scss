@@ -185,7 +185,7 @@ a {
   color:#fff;
   background: linear-gradient(135deg, #000, #000 50%, #333 50%, #333);      
   background:#000;
-  height:10vh;
+  height:9vh;
   border-bottom:1px $brown solid;  
   color:rgba(255,255,255,1);    
 }
@@ -214,7 +214,7 @@ a {
   text-align:center;
   list-style:none;
   padding:2vh 0;
-  height:22vh;
+  height:24vh;
   
   // hover over hand, specifically card
   &.playable-hand:hover {
@@ -337,14 +337,13 @@ a {
 
 #played-cards {
 //  float:left;
-  width:100vw;
-  height:15vh;
-  text-align:center;
+  height:24vh;
   list-style:none;
-  padding:0;
-  height:25vh;
-  margin:0;
   list-style:none; 
+  margin:0;
+  padding:0;
+  text-align:center;
+  width:100vw;
 
   
 //  margin-bottom:140px;

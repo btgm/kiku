@@ -31,7 +31,7 @@
 
   {% else %}
       
-  <form action='/gameplay' method='post'>
+  <form action='/gameplay' method='post'>    
     <div id="hand-computer" class="hand playable-hand">
     {% for card in gameState.computer %}
       <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-show number-show color-known-{{ card.isColorKnown }} number-known-{{  card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}' draggable='true'>

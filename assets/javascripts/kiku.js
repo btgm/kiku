@@ -408,7 +408,9 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
 */
 
 (function(){
-  var plays = document.querySelectorAll('input');
+  var plays = document.querySelectorAll('input'),
+      form = document.forms[0],
+      httpRequest = new XMLHttpRequest();
   
   // Dropping cards on a play
   for(var p=0; p < plays.length;p++) {
@@ -421,8 +423,10 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
     // Make a play with dropped card by trigger click to submit the form
     play.addEventListener('drop', function(e){    
       e.preventDefault();
-      var card = e.dataTransfer.getData("card");
-      document.getElementsByClassName(card)[0].click();
+      var card = e.dataTransfer.getData("card"),
+          card_element = document.getElementsByClassName(card)[0];      
+          form.dataset.button = card_element.value;
+          card_element.click();
     });
   }
 
@@ -433,4 +437,21 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
           e.dataTransfer.setData("card", e.target.className);
       }
   });
+  
+
+  httpRequest.onreadystatechange = alertContents;
+      
+  function alertContents() {
+    console.log(httpRequest);
+  }
+        
+  // ajax
+  form.addEventListener('submit', function(e){
+    var action = document.querySelector('input:checked').value;
+    httpRequest.open('POST', '/gameplay');
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    httpRequest.send("action=" + action + "&card=" + form.dataset.button);    
+    e.preventDefault();  
+  });
+  
 })()

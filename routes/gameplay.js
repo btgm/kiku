@@ -95,6 +95,7 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
 
 /* Take POST from form and redirect as appropriate */
 router.post('/', function(req, res, next) {
+  console.log(req.body)
   var cardIndex = req.body.card.split(',')[0],
       handKey = req.body.card.split(',')[1],
       actionKey = req.body.action;
