@@ -39,7 +39,13 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   document.addEventListener('click', function (e) {
     if (e.target.nodeName === 'BUTTON') {      
         form.dataset.button = e.target.value;
-    }    
+    } 
+        
+    // listen for clicks to bring up discard and game log overlay   
+    if (typeof e.target.dataset.show !== 'undefined') {      
+      console.log('show')
+      e.preventDefault();
+    } 
   })
     
   // after the POST request for a play is made do another
@@ -72,5 +78,6 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
     httpRequest.send("action=" + action + "&card=" + form.dataset.button);    
     e.preventDefault();  
   });
+
   
 })()

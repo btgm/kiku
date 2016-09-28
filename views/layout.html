@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
 </head>
 <body class='no-js'>
-<script>(document.body.className = document.body.className.replace('no-js',''))()</script>
+<script>(function() { document.body.className = document.body.className.replace('no-js','')})()</script>
 {% block content %}
 {% endblock %}  
 <script src='/kiku.js'></script>
