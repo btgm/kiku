@@ -4,15 +4,24 @@
 
 ****************/
 
-@import 'normalize';
+//@import 'normalize';
+* {
+ box-sizing: border-box
+}
 
+$brown: #2F2523;
+
+$red: #FF4136;
+$yellow: #FFDC00;
+$blue: #0074D9;
+$green: #2ECC40;
 
 @mixin number($number) {  
   &.number-known-true, &.number-show {    
     &:after,&:before {
       content:$number;
       display:inline-block;
-      font-size:5.5vw;
+      font-size:3.5vh;
       position: absolute;
       padding:.25em;
     }  
@@ -30,10 +39,10 @@
 }
 
 @mixin card-color($color, $color2:darken($color,5%)) {
-  -webkit-filter: grayscale(1);
+  filter: grayscale(1);
   background: linear-gradient(135deg, #eee, #eee 50%, #ddd 50%, #ddd);      
   &.color-known-true, &.color-show {
-    -webkit-filter: grayscale(0);
+    filter: grayscale(0);
     background:$color;
     background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);      
   }
@@ -44,8 +53,6 @@
     content:$emoji;
   }  
 }
-
-
 
 /***************
 
@@ -59,7 +66,7 @@ label {
 }
 
 .container {
-  max-width: 920px;
+//  max-width: 920px;
   margin:0 auto;
 }
 
@@ -68,35 +75,48 @@ button {
   appearance:none;
   outline:none;
   cursor:pointer;
+  font-family:inherit;
 }
 
 input[type=radio] {
-  position:relative;
-  width:50px;
   display:inline-block;
   overflow:hidden;
-  border:1px #000 solid;
+  margin:0;
   -webkit-appearance:none;
   appearance:none;
-  height:2em;
   outline:none;
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border:0;
+  cursor:pointer;
+  transition: all 250ms;
+  
+  &:hover {
+    background:rgba(255,255,255,.1);
+  }
   
   &:after {
     content: " ";
-    background: #fff;
+    background: rgba(0,0,0,0);
     position: absolute;
     width:100%;
-    height:125%;
-    top:-1px;
-    left:3px;    
+    height:100%;
+    top:0;
+    left:0;
+    transition: all 450ms;
   }
   
   &:checked::after {
     content: " ";
-    background: #0f0;
+    background: rgba($green,.25);
     position: absolute;
     top:0;
     left:0;
+    width:100%;
+    height:100%;
   }
 }
 
@@ -107,23 +127,80 @@ input[type=radio] {
 
 /********************
 
- General
+ General / Header / Title/ Scoreboard
 
 *********************/
+body {
+  font-family:Monaco,Consolas,Courier New, monospace;  
+  background:#111;
+  color:#fff;
+  margin:0;
+}
+
+a {
+  color:$blue;
+}
+
 
 #title {
-  font-family:Monaco,Consolas,Courier New, monospace;
+//  font-family:Monaco,Consolas,Courier New, monospace;
   text-transform:uppercase;
-  text-align:center;
-  font-size:3em;
+  display:inline-block;
+  font-size:5.5vh;
+  margin:0;
+  padding:.1em .5em;
+  color: rgba(0,0,0,1);
+  text-shadow:
+         3px 3px 0 #fff,
+       -1px -1px 0 #fff,  
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+         1px 1px 0 #fff;
   
-  &:before {
+  &:before,&:after {
     content:"👾 ";
+    text-shadow:none;
   }
   &:after {
     content:" 👾";
+    text-shadow:none;
   }
 }
+
+.meter {
+  background:#eee;
+  display:inline-block;
+  height:1em;
+  width:15vw;
+  
+  span {
+    background:#0074D9;
+    display:inline-block;
+    height:1em;
+  }
+}
+
+.primary-header {
+//  font-family:Monaco,Consolas,Courier New, monospace;
+  color:#fff;
+  background: linear-gradient(135deg, #000, #000 50%, #333 50%, #333);      
+  background:#000;
+  height:10vh;
+  border-bottom:1px $brown solid;  
+  color:rgba(255,255,255,1);    
+}
+
+#game-status {
+  display:inline-block;  
+}
+
+.game-status-item {
+  display:inline-block;
+  text-align:center;
+  margin-right:1.5em;  
+//  width:23vw;
+}
+
 
 
 
@@ -133,29 +210,16 @@ input[type=radio] {
 
 *********************/
 
-#deck {
-  list-style:none;
-  margin:0;
-  padding:0;
-  position:relative;
-  float:right;
-  .card {
-    position: absolute;
-    top:1px;
-    left:0;
-    border:1px #fff solid;
-  }
-}
-
  .hand {
   text-align:center;
   list-style:none;
-  padding:0;
+  padding:2vh 0;
+  height:22vh;
   
   // hover over hand, specifically card
   &.playable-hand:hover {
     .card:not(:hover) {
-      -webkit-filter: grayscale(.75);
+      filter: grayscale(.75);
       color:#aaa;
       transform:scale(.75);
     }    
@@ -188,10 +252,11 @@ input[type=radio] {
   text-align:left;
   .card {
     transform:scale(.85);
+    color:#000;
   }
   &:hover {
     .card:not(:hover),.card:hover {
-      -webkit-filter: none;
+      filter: none;
       color:#000;
 //      transform:none;
     }        
@@ -200,8 +265,8 @@ input[type=radio] {
 
 .card {
   display:inline-block;
-  width:18.5vw;
-  height:25.9vw;
+  width:20vw;
+  height:20vh;
   border-radius:6px;
   border: rgba(0,0,0,.25) solid 1px;
   box-shadow:-1px 2px 2px rgba(0,0,0,.1);
@@ -210,8 +275,14 @@ input[type=radio] {
   position: inline-block;
   margin:0 -10px 0 0;
   text-shadow: -1px -1px 0px rgba(255,255,255,.25),1px 1px 0px rgba(255,255,255,.5);
-  font-size:7vw;
-  font-family:Courier;
+  font-size:3.8vh;
+//  font-family:Courier;
+
+  @media screen and (min-width: 720px) {
+    width:8vw;
+    height:18vh;
+    font-size:6.7vh;
+  }
   
   &:nth-of-type(2n+1) {    
     transform: translate3d(0,2%,0) rotate(2deg);
@@ -226,19 +297,26 @@ input[type=radio] {
   // Thanks: http://clrs.cc/
      
   &.color-blue {
-    @include card-color(#0074D9);
+    @include card-color($blue);
   }
   &.color-green {
-    @include card-color(#2ECC40);
+    @include card-color($green);
   }
   &.color-white {
     @include card-color(#FFF);
   }
   &.color-yellow {
-    @include card-color(#FFDC00);
+    @include card-color($yellow);
   }
   &.color-red {
-    @include card-color(#FF4136);
+    @include card-color($red);
+  }
+  
+  &.blank-card {
+    @include card-color(#333);    
+    opacity:.5;
+    border:3px rgba(255,255,255,.3) dashed;
+    filter: grayscale(1) !important;
   }
   
   // Numbers
@@ -255,20 +333,59 @@ input[type=radio] {
 
 
 
+// Played space
+
 #played-cards {
-  float:left;
-  width:100%;
-  clear:both;
-  margin-bottom:140px;
+//  float:left;
+  width:100vw;
+  height:15vh;
+  text-align:center;
+  list-style:none;
+  padding:0;
+  height:25vh;
+  margin:0;
+  list-style:none; 
+
+  
+//  margin-bottom:140px;
+  
    
   & > li {
-    float:left;
-    width:20%;
+    width:20vw;
+    height:100%;
+    display:inline-block;
+    position:relative;
+
+    &:nth-child(odd) {
+      background:rgba(255,255,255,.033);
+    }
+    
+    &.red-played { border-top:5px $red solid; border-bottom:5px $red solid; }
+    &.green-played { border-top:5px $green solid; border-bottom:5px $green solid; }
+    &.blue-played { border-top:5px $blue solid; border-bottom:5px $blue solid; }
+    &.yellow-played { border-top:5px $yellow solid; border-bottom: 5px $yellow solid; }
+    &.white-played { border-top:5px #fff solid; border-bottom: 5px #fff solid; }
   }  
   
-  list-style:none; 
+  
+  /*** 
+   
+   Alter card apperance in played space
+  
+  ***/
   .card { 
-    margin-bottom:-65%;
+      transform:rotate(0deg);
+      display:none;
+      font-size:4vh;
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform: translate3d(-50%,-50%,0);
+      
+      
+      &:last-child {
+        display:inline-block;
+      };
   }
   
   .card-decoration {
@@ -294,11 +411,30 @@ input[type=radio] {
 
 .label-container {
   text-align:center;
-  margin:2em 0;
+  border:1px $brown solid;
+  border-left:0;
+  border-right:0;
+  display:block;
+  height:9vh;
+  background:#151515;
+}
+
+.play-instructions {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform: translate3d(-50%,-50%,0);
 }
 
 label  {
   display:inline-block;
+  width: 50vw;
+  padding:1em;
+  height:9vh;
+  background: #001f3f;
+//  background:#f0f;
+  position: relative;
+  cursor:pointer;
 }
 
 .hidden {

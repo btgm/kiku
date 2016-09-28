@@ -3,8 +3,21 @@
 {% block content %}
 
 <div class="container">
-  
-  <h1 id="title">{{ title }}</h1>
+  <header class='primary-header'>
+    <h1 id="title">{{ title }}</h1>
+    <div id="game-status">
+      <span class='game-score game-status-item'>SCORE  {{ gameState.score }} / 25</span>
+      <span class='game-score game-status-item'>TIME  <span class='sr-only'>{{ gameState.timeTokens }}</span>
+      {% set timeTokens = Array(gameState.timeTokens) %}
+      {% for t in timeTokens %}⌛️{% endfor %}
+    </span>
+      <span class='game-score game-status-item'>FUSES <span class='sr-only'>{{ gameState.fuseTokens }}</span>
+    {% set fuseTokens = Array(gameState.fuseTokens) %}
+    {% for t in fuseTokens %}⭐️{% endfor %}    
+    </span>
+    <a href='/gameplay/reset'>Restart Game</a>
+    </div>
+  </header>
   
   {% if gameState.gameFinished %}
     
@@ -21,7 +34,7 @@
   <form action='/gameplay' method='post'>
     <div id="hand-computer" class="hand playable-hand">
     {% for card in gameState.computer %}
-      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-show number-show color-known-{{ card.isColorKnown }} number-known-{{  card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
+      <button name='card' value='{{ loop.index0 }},computer' class='computer-card card color-show number-show color-known-{{ card.isColorKnown }} number-known-{{  card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}' draggable='true'>
         👽
         <div class="info">
           
@@ -38,47 +51,42 @@
     
     
     <div class='label-container'>
-      <label for='play1'><input type="radio" id="play1" name="action" value='tellColor'> Tell about color</label>
-      <label for='play2'><input type="radio" id="play2" name="action" value='tellNumber'> Tell about number</label>
+      <label for='play1'><input type="radio" id="play1" name="action" value='tellColor'><span class='play-instructions'>Tell about color</span></label><label for='play2'><input type="radio" id="play2" name="action" value='tellNumber'><span class='play-instructions'>Tell about number</span></label>
     </div>
-
-    <hr>
     
-    <h2>Played</h2>
-    
-    <ul id="played-cards" class='hand'>
-    {% for color,cards in gameState.played %}
-      <li>{{ color }}
-        <ul>
-          {% for card in cards %}
-      <li class='card color-{{ card.color }} number-{{ card.number }} color-known-true number-known-true'>
-        <span class='card-decoration'>
-          📡<span class='heart'></span>👽      
-        </span>
-      </li>  
-          {% endfor %}
-        </ul>
-      </li>      
-    {% endfor %}
-    </ul>
-
-    
-    <hr>
+    <h2 class='sr-only'>Played Cards</h2>    
+      <ul id="played-cards" class='hnd'>
+      {% for color,cards in gameState.played %}<li class='{{ color }}-played'><span class='sr-only'>{{ color }} cards</span>
+          <ul>
+            <li class='card  color-known-true number-known-true blank-card'>
+              <span class='card-decoration'>
+                📡<span class='heart'></span>👽      
+              </span>
+            </li>              
+            {% for card in cards %}
+        <li class='card color-{{ card.color }} number-{{ card.number }} color-known-true number-known-true'>
+          <span class='card-decoration'>
+            📡<span class='heart'></span>👽      
+          </span>
+        </li>  
+            {% endfor %}
+          </ul>
+        </li>{% endfor %}
+      </ul>
     
     <div class='label-container'>
-      <label for='play3'><input type="radio" id="play3" name="action" value='discard'> Discard a card</label>
-      <label for='play4'><input type="radio" id="play4" name="action" value='play' checked> Play a card</label>
+      <label for='play3'><input type="radio" id="play3" name="action" value='discard'><span class='play-instructions'>Discard a card</span></label><label for='play4'><input type="radio" id="play4" name="action" value='play' checked><span class='play-instructions'>Play a card</span></label>
     </div>
 
     <div id="hand-player" class="hand playable-hand">
     {% for card in gameState.player %}
-      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}'>
+      <button name='card' value='{{ loop.index0 }},player' class='player-card card color-known-{{ card.isColorKnown }} number-known-{{ card.isNumberKnown }} color-{{ card.color }} number-{{ card.number }}' draggable='true'>
         📡
         <div class="info">
-          <span>P:{{ card.canPlay }}</span>,
-          <span>D:{{ card.canDiscard }}</span>          
-          <span class="info-color">🎨</span>  
-          <span class="info-number">🔢</span>  
+          <span class="hidden">P:{{ card.canPlay }}</span>
+          <span class="hidden">D:{{ card.canDiscard }}</span>          
+          <!-- <span class="info-color">🎨</span>   -->
+          <!-- <span class="info-number">🔢</span>   -->
           <span class='sr-only'>Is the color known? {{ card.isColorKnown }}</span>
           <span class='sr-only'>Is the number known? {{ card.isNumberKnown }}</span>
         </div>  
