@@ -1,0 +1,16 @@
+{% for color,cards in played %}<li class='{{ color }}-played'><span class='sr-only'>{{ color }} cards</span>
+  <ul>
+    <li class='card  color-known-true number-known-true blank-card'>
+      <span class='card-decoration'>
+        📡<span class='heart'></span>👽      
+      </span>
+    </li>              
+    {% for card in cards %}
+<li class='card color-{{ card.color }} number-{{ card.number }} color-known-true number-known-true'>
+  <span class='card-decoration'>
+    📡<span class='heart'></span>👽      
+  </span>
+</li>  
+    {% endfor %}
+  </ul>
+</li>{% endfor %}

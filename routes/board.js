@@ -11,15 +11,19 @@ router.get('/', function(req, res, next) {
 router.get('/hand/:handKey', function(req, res, next) {
   var handKey = req.params.handKey;
   var gameState = req.session.gameState;
-  
-  
-  
+      
   res.render('templates/hand', {
     hand: gameState[handKey],
     handKey: handKey
-  });
-  
-  
+  });  
+});
+
+router.get('/played', function(req, res, next) {
+  var gameState = req.session.gameState;
+      
+  res.render('templates/played', {
+    played: gameState.played
+  });  
 });
 
 module.exports = router;

@@ -433,28 +433,51 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   // Dragging a button to one of the plays
   document.addEventListener('dragstart', function (e) {
       if (e.target.nodeName === 'BUTTON') {
-        console.log("Dragging", e.target.className)
           e.dataTransfer.setData("card", e.target.className);
       }
   });
   
-  // update game state
-  httpRequest.onreadystatechange = handleGamePlay;
+  document.addEventListener('click', function (e) {
+    if (e.target.nodeName === 'BUTTON') {      
+        form.dataset.button = e.target.value;
+    }    
+  })
   
+  function updateHand(handKey) {
+    var xhrHandRequest = new XMLHttpRequest();    
+    xhrHandRequest.open('GET', '/board/hand/' + handKey);
+    xhrHandRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhrHandRequest.send();
+    xhrHandRequest.onreadystatechange = function(){
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById('hand-' + handKey).innerHTML = this.responseText;
+      }
+    };          
+  }
   
+  function updatePlayedCards(handKey) {
+    var xhrHandRequest = new XMLHttpRequest();    
+    xhrHandRequest.open('GET', '/board/played/');
+    xhrHandRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+    xhrHandRequest.send();
+    xhrHandRequest.onreadystatechange = function(){
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById('played-cards').innerHTML = this.responseText;
+      }
+    };          
+  }
+  
+
   // function to update game state and then reset the
   // ready function to react after the play is made  
   function updateGameState() {
     if (this.readyState == 4 && this.status == 200) {
       var gameState = JSON.parse( this.responseText );
       console.log("Updated game state")
-      console.log( gameState );
-      
-      // request for new computer hand
-      // request for new player hand
-      
-      
-      httpRequest.onreadystatechange = handleGamePlay;
+      console.log( gameState );            
+      updateHand('computer');      
+      updateHand('player');
+      updatePlayedCards();   
     }
   }
   
@@ -474,6 +497,7 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   // ajax
   form.addEventListener('submit', function(e){
     var action = document.querySelector('input:checked').value;
+    httpRequest.onreadystatechange = handleGamePlay;
     httpRequest.open('POST', '/gameplay');
     httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     httpRequest.send("action=" + action + "&card=" + form.dataset.button);    
