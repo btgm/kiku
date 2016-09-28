@@ -417,18 +417,14 @@ a {
   display:block;
   height:9vh;
   background:#151515;
+  
 }
 
 .play-instructions {
   position:absolute;
   left:50%;
   top:50%;
-  transform: translate3d(-50%,-50%,0);
-  display:block;
-  width:97%;
-  padding:1em;
-  background:rgba(255,255,255,.12);
-  
+  transform: translate3d(-50%,-50%,0);    
 }
 
 label  {
@@ -437,9 +433,12 @@ label  {
   padding:1em;
   height:9vh;
   background: #001f3f;
-//  background:#f0f;
   position: relative;
   cursor:pointer;
+  &:last-of-type {
+    background: lighten(#001f3f, 5%);    
+  }
+
 }
 
 .hidden {
