@@ -36,9 +36,12 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       }
   });
   
+  // ordinary click
   document.addEventListener('click', function (e) {
-    if (e.target.nodeName === 'BUTTON') {      
-        form.dataset.button = e.target.value;
+    if (e.target.nodeName === 'BUTTON' || e.target.parentNode.nodeName === 'BUTTON') {        
+        var card = e.target.nodeName === 'BUTTON' ? e.target : e.target.parentNode;
+        console.log(card);
+        form.dataset.button = card.value;        
     } 
         
     // listen for clicks to bring up discard and game log overlay   
@@ -91,6 +94,9 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
     httpRequest.open('POST', '/gameplay');
     httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
     httpRequest.send("action=" + action + "&card=" + form.dataset.button);    
+    console.log(form.dataset.button);
+    console.log(action);
+    
     e.preventDefault();  
   });
 

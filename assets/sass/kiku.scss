@@ -45,7 +45,7 @@ $green: #2ECC40;
     filter: grayscale(0);
     background:$color;
     background: linear-gradient(135deg, $color, $color 50%, $color2 50%, $color2);      
-    .emblem {  animation: colorshift 1s infinite ease-in-out alternate;  }
+    .emblem {  animation: colorshift 1s infinite ease-in-out alternate; z-index:-1; }
   }
 }
 
