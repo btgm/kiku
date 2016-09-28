@@ -8,5 +8,5 @@
 {% for t in fuseTokens %}⭐️{% endfor %}    
 </span>
 <a href='/gameplay/reset'>Restart</a>
-<a href="#" data-show='discard' class='js-only'>Discards</a>
-<a href="#" data-show='log' class='js-only'>Log</a>
+<a href="#" data-show='hand-discard' class='js-only'>Discards <small>({{ gameState.discard.length }})</small></a>
+<a href="#" data-show='game-log' class='js-only'>Game Log <small>({{ gameState.log.length }})</small></a>

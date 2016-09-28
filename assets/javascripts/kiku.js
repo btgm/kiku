@@ -43,8 +43,23 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
         
     // listen for clicks to bring up discard and game log overlay   
     if (typeof e.target.dataset.show !== 'undefined') {      
-      console.log('show')
+      var overlayContent = document.getElementById( e.target.dataset.show ).outerHTML,
+          overlay = document.getElementById('overlay');
+          
+          if (overlay.className == 'shown') {
+            overlay.className = '';
+            overlay.innerHTML = '';
+          }else{
+            overlay.innerHTML = overlayContent
+            overlay.className = 'shown';
+          }
+          
       e.preventDefault();
+    } 
+    
+    // Dismiss the overlay with a tap/click
+    if (e.target.id === 'overlay') {      
+      e.target.className='';
     } 
   })
     
