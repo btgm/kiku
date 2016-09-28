@@ -449,6 +449,11 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       var gameState = JSON.parse( this.responseText );
       console.log("Updated game state")
       console.log( gameState );
+      
+      // request for new computer hand
+      // request for new player hand
+      
+      
       httpRequest.onreadystatechange = handleGamePlay;
     }
   }

@@ -10,6 +10,7 @@ var session = require('express-session');
 
 var routes = require('./routes/index');
 var gameplay = require('./routes/gameplay');
+var board = require('./routes/board');
 var GameState = require('./GameState.js');
 
 var app = express();
@@ -38,6 +39,7 @@ app.use(GameState);
 
 app.use('/', routes);
 app.use('/gameplay', gameplay);
+app.use('/board', board);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
