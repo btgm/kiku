@@ -10,7 +10,19 @@
 <script>(function() { document.body.className = document.body.className.replace('no-js','')})()</script>
 {% block content %}
 {% endblock %}
-<div id="overlay"></div>  
+<div id="overlay" {% if gameState.log.length === 0 %} class="shown"{% endif %}>
+  {% if gameState.log.length === 0 %}
+  <div class='overlay-text'>
+    <h1>👾 Welcome to KIKU! 👾</h1>
+    <p>
+      Kiku is an adaptation of <a href='https://en.wikipedia.org/wiki/Hanabi_(card_game)'>Hanabi</a> but with a little bit of a SETI twist. Inspired by Hanabi and this summer's <a href='http://www.cnn.com/2016/08/30/health/seti-signal-hd-164595-alien-civilization/'>report of a strong signal</a> from star HD 164595.
+    </p>
+    <p>
+      The word <a href='http://japanese.about.com/od/wordoftheday/p/word45.htm'>kiku</a> means to hear or listen in Japanese. As an homeage to both Hanabi and this fun bit of news it seemed like an appropriate title.
+    </p>
+  </div>
+  {% endif %}  
+</div>  
 <script src='/kiku.js'></script>
 </body>
 </html>

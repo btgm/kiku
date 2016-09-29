@@ -489,6 +489,24 @@ label  {
   }
 }
 
+.overlay-text {
+  max-width:60vw;
+  margin:0 auto;
+  line-height:1.8em;
+  
+  h1,h2,h3,h4,h5 {
+    color: rgba(0,0,0,1);
+    text-shadow:
+           3px 3px 0 #fff,
+         -1px -1px 0 #fff,  
+          1px -1px 0 #fff,
+          -1px 1px 0 #fff,
+           1px 1px 0 #fff;
+    text-transform: uppercase;    
+    text-align:center;
+  }
+}
+
 /*****
 
  Hiding some things for no javascript
