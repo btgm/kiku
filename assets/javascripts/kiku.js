@@ -3,8 +3,8 @@
  Kiku Card Game
  ===
 
-Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
 ***/
+
 
 (function(){
   var plays = document.querySelectorAll('input'),
@@ -96,23 +96,24 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
         
     // listen for clicks to bring up discard and game log overlay
     // looks for data attribute and uses content from element with 
-    // matching id, e.g., data='game-log'
+    // matching id, e.g., data-show='game-log'
     if (typeof e.target.dataset.show !== 'undefined') {      
-      var overlayContent = document.getElementById( e.target.dataset.show ).outerHTML;
-          
-          if (overlay.className == 'shown') {
-            overlay.className = '';
-            overlayText.innerHTML = '';
+      var id = e.target.dataset.show,
+          overlayContent = document.getElementById( id ).outerHTML;
+          if (overlay.className == 'shown' && overlay.dataset.id === id) {
+            // overlay.className = '';
+            // overlayText.innerHTML = '';
           }else{
             overlayText.innerHTML = overlayContent
             overlay.className = 'shown';
+            overlay.dataset.id = id;
           }
           
       e.preventDefault();
     } 
     
     // Dismiss the overlay with a tap/click
-    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' ) {      
+    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' || e.target.dataset.dismiss ) {      
       overlay.className = '';
       e.preventDefault();
     } 
@@ -340,7 +341,5 @@ function kikuTalk(text) {
     return false;
   }  
 }
-
- 
   
 })()

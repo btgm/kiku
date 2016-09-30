@@ -4,7 +4,6 @@
 
 ****************/
 
-//@import 'normalize';
 * {
  box-sizing: border-box
 }
@@ -84,13 +83,8 @@ label {
   cursor:pointer;
 }
 
-.container {
-//  max-width: 920px;
-  margin:0 auto;
-}
 
 button {
-  -webkit-appearance:none;
   appearance:none;
   outline:none;
   cursor:pointer;
@@ -143,6 +137,13 @@ input[type=radio] {
   display:none;
 }
 
+.hide-mobile {
+  display:none;
+  @media screen and (min-width: 720px) {
+    display:inherit;
+  }
+}
+
 
 /********************
 
@@ -166,10 +167,7 @@ a {
 
 
 #title {
-//  font-family:Monaco,Consolas,Courier New, monospace;
-  text-transform:uppercase;
-  display:inline-block;
-  font-size:5.5vh;
+  font-size:4vh;
   margin:0;
   padding:.1em .5em;
   color: rgba(0,0,0,1);
@@ -179,28 +177,27 @@ a {
         1px -1px 0 #fff,
         -1px 1px 0 #fff,
          1px 1px 0 #fff;
-  
-  &:before,&:after {
-    content:"👾 ";
-    text-shadow:none;
-  }
-  &:after {
-    content:" 👾";
-    text-shadow:none;
-  }
-}
 
-.meter {
-  background:#eee;
-  display:inline-block;
-  height:1em;
-  width:15vw;
+ position:absolute;
+ top:50%;
+ left:0%;
+ transform: translate3d(0%,-50%,0);    
+ 
+ &:before,&:after {
+   content:"👾 ";
+   text-shadow:none;
+ }
+ &:after {
+   content:" 👾";
+   text-shadow:none;
+ }
+
+  @media screen and (min-width: 720px) {
+    font-size:5.5vh;
+    left:0;
+    transform: translate3d(0,-50%,0);    
+  }         
   
-  span {
-    background:#0074D9;
-    display:inline-block;
-    height:1em;
-  }
 }
 
 .primary-header {
@@ -208,9 +205,54 @@ a {
   color:#fff;
   background: linear-gradient(135deg, #000, #000 50%, #333 50%, #333);      
   background:#000;
-  height:9vh;
+  height:15vh;
   border-bottom:1px $brown solid;  
+  padding:0 1em;
   color:rgba(255,255,255,1);    
+  font-size:.65em;
+  position:relative;
+  width:100%;
+    
+  @media screen and (min-width: 720px) {
+    height:9vh;
+    padding:0;
+    font-size:1em;
+  }
+}
+
+.status-info-left, .status-info-right {
+  position: absolute;
+  top:50%;
+  left:50%;
+  padding:0 1em;
+  transform: translate3d(0%,-50%,0);
+  font-size:.75em;
+  width:25vw;
+  
+  @media screen and (min-width: 720px) {
+    left:50%;
+    width:auto;
+    transform: translate3d(-50%,-50%,0);
+  }
+}
+
+.status-info-right {
+  left:auto;
+  right:0;
+  transform: translate3d(0,-50%,0);
+  
+  a {
+    background:#333;
+    color:#fff;
+    text-decoration:none;
+    display:inline-block;
+    padding:.5em 1em;
+    margin:0 0 1em 0;
+    border-radius:4px;
+    &:hover {
+      background:#444;
+    }
+  }
 }
 
 #game-status {
@@ -219,7 +261,6 @@ a {
 
 .game-status-item {
   display:inline-block;
-  text-align:center;
   margin-right:1.5em;  
 //  width:23vw;
 }
@@ -237,7 +278,12 @@ a {
   text-align:center;
   list-style:none;
   padding:2vh 0;
-  height:24vh;
+  height:23vh;
+  
+  @media screen and (min-width: 720px) {
+    height:24vh;
+  }
+  
   
   // hover over hand, specifically card
   &.playable-hand:hover {
@@ -288,8 +334,8 @@ a {
 
 .card {
   display:inline-block;
-  width:20vw;
-  height:20vh;
+  width:18vw;
+  height:19vh;
   border-radius:6px;
   border: rgba(0,0,0,.25) solid 1px;
   box-shadow:-1px 2px 2px rgba(0,0,0,.1);
@@ -368,6 +414,7 @@ a {
   text-align:center;
   width:100vw;
   color:#000;
+  
 
   
 //  margin-bottom:140px;
@@ -443,9 +490,13 @@ a {
   border-left:0;
   border-right:0;
   display:block;
-  height:9vh;
+  height:7vh;
   background:#151515;
-  
+  font-size:.7em;
+  @media screen and (min-width: 720px) {
+    font-size:1em;
+    height:9vh;
+  }
 }
 
 .play-instructions {
@@ -459,13 +510,21 @@ label  {
   display:inline-block;
   width: 50vw;
   padding:1em;
-  height:9vh;
+  height:7vh;
   background: #001f3f;
   position: relative;
   cursor:pointer;
+  
+  @media screen and (min-width: 720px) {
+    font-size:1em;
+    height:9vh;
+  }
+  
   &:last-of-type {
     background: lighten(#001f3f, 5%);    
   }
+  
+  
 
 }
 
@@ -495,21 +554,55 @@ label  {
     opacity:1;
   }
 }
-.overlay-dismiss,.overlay-read {
-  padding:1em;
-  margin:.5em;
-  background:rgba(255,255,255,.2);
-  display:inline-block;
-  color:#fff;
-  cursor:pointer;
+
+.overlay-menu {
+  text-align:center;
+  background:rgba(0,0,0,.9);
+  position:fixed;
+  width:100%;
+  font-size:.75em;
+  h1 {
+    margin-bottom:0;
+    color: rgba(0,0,0,1);
+    text-shadow:
+           3px 3px 0 #fff,
+         -1px -1px 0 #fff,  
+          1px -1px 0 #fff,
+          -1px 1px 0 #fff,
+           1px 1px 0 #fff;
+    
+  }
+  a {
+    display:inline-block;
+    margin:.5em;
+  }
 }
+
+.overlay-dismiss,.overlay-read {
+//  padding:1em;
+//  margin:.5em;
+//  background:rgba(255,255,255,.2);
+//  display:inline-block;
+//  color:#fff;
+//  cursor:pointer;
+}
+
+.overlay-dismiss {
+  position:absolute;
+  top:0;
+  right:0;
+}
+
 .overlay-text {
   max-width:90vw;
   margin:0 auto;
   line-height:1.8em;
+  margin-top:8rem;
+  font-size:.75em;
   
   @media screen and (min-width: 720px) {
     max-width:60vw;
+    font-size:1em;
   }
   
   
