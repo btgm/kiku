@@ -13,7 +13,7 @@ var gameplay = require('./routes/gameplay');
 var board = require('./routes/board');
 var GameState = require('./GameState.js');
 
-var minifyHTML = require('express-minify-html');
+// var minifyHTML = require('express-minify-html');
 
 var app = express();
 
@@ -21,17 +21,17 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 
 // minify html
-app.use(minifyHTML({
-    override:      true,
-    htmlMinifier: {
-        removeComments:            true,
-        collapseWhitespace:        true,
-        collapseBooleanAttributes: true,
-        removeAttributeQuotes:     true,
-        removeEmptyAttributes:     true,
-        minifyJS:                  true
-    }
-}));
+// app.use(minifyHTML({
+//     override:      true,
+//     htmlMinifier: {
+//         removeComments:            true,
+//         collapseWhitespace:        true,
+//         collapseBooleanAttributes: true,
+//         removeAttributeQuotes:     true,
+//         removeEmptyAttributes:     true,
+//         minifyJS:                  true
+//     }
+// }));
 
 var swig = new swig.Swig();
 app.engine('html', swig.renderFile);
