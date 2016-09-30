@@ -40,7 +40,7 @@ $green: #2ECC40;
 
 @mixin card-color($color, $color2:darken($color,5%)) {
   filter: grayscale(1);
-  background: linear-gradient(135deg, #eee, #eee 50%, #ddd 50%, #ddd);      
+  background: linear-gradient(135deg, #ccc, #ccc 50%, #bbb 50%, #bbb);      
   &.color-known-true, &.color-show {
     filter: grayscale(0);
     background:$color;
