@@ -119,7 +119,8 @@
     }
 
     // close the notification overlay
-    if (e.target.id === 'notification') {
+
+    if (e.target.id === 'notification' || returnSpecificParent(e.target, 'notification')) {
       notification.style.zIndex = -1;
       notification.className = "";
       clearTimeout(notificationTimeout);
