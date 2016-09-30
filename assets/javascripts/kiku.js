@@ -5,7 +5,6 @@
 
 ***/
 
-
 (function(){
   var plays = document.querySelectorAll('input'),
       played = document.querySelectorAll('#played-cards > li'),

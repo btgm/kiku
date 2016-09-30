@@ -660,6 +660,46 @@ a {
   color:#999;
 }
 
+/*******************
+
+ Game Over Screen
+
+*********************/
+
+.game-over {
+  max-width:60em;
+  width:50vw;
+  margin:0 auto;
+  padding:2em 0;
+  text-align:center;
+}
+
+.game-over-play-again {
+  background:$blue;
+  display:inline-block;
+  padding:1em 2em;
+  border-radius:4px;
+  color:#fff;
+  text-decoration:none;
+  text-transform:uppercase;  
+}
+
+.game-over-report {
+  background:#333;
+  padding:1em;
+}
+
+.game-over-title {
+  color: rgba(0,0,0,1);
+  text-shadow:
+         3px 3px 0 #fff,
+       -1px -1px 0 #fff,  
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+         1px 1px 0 #fff;    
+}
+
+
 
 /*****
 
