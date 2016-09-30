@@ -3,11 +3,12 @@
  Kiku Card Game
  ===
 
-Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
 ***/
+
 
 (function(){
   var plays = document.querySelectorAll('input'),
+      played = document.querySelectorAll('#played-cards > li'),
       form = document.forms[0],
       httpRequest = new XMLHttpRequest(),
       overlay = document.getElementById('overlay'),
@@ -32,13 +33,57 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
           card_element.click();
     });
   }
-
+  
   // Dragging a button to one of the plays
   document.addEventListener('dragstart', function (e) {
       if (e.target.nodeName === 'BUTTON') {
           e.dataTransfer.setData("card", e.target.className);
       }
   });
+  
+  // Because hovering is complicated sometimes
+  function returnSpecificParent(el, id) {   
+    while (el.parentNode) {
+      var previousElement = el;
+      el = el.parentNode;
+      if (el.id === id) return previousElement;
+    }
+    return null;
+  }  
+  
+  // Dragging card onto a stack to play
+  document.addEventListener('dragenter', function(e){ 
+    var el =  returnSpecificParent (e.target, 'played-cards');
+    if ( el ) {
+      el.className += ' hover-played';
+      document.querySelector('input[value=play]').checked=true;
+    }
+  });
+  
+  document.addEventListener('dragover', function(e){    
+    var el = returnSpecificParent (e.target, 'played-cards');
+    if ( el ) e.preventDefault();
+  });    
+
+  document.addEventListener('dragleave', function(e){    
+    var el =  returnSpecificParent (e.target, 'played-cards');
+    if ( el ) {
+      el.className = el.className.replace(" hover-played", "");      
+    }
+  });
+  
+  // Make a play with dropped card by trigger click to submit the form
+  document.addEventListener('drop', function(e){    
+    if ( e.target.parentNode.id === 'played-cards' || e.target.parentNode.className == 'played-cards-stack') {
+      e.preventDefault();
+      var card = e.dataTransfer.getData("card"),
+          card_element = document.getElementsByClassName(card)[0];      
+          form.dataset.button = card_element.value;
+          card_element.click();
+    }
+  });
+  
+  
   
   // ordinary click
   document.addEventListener('click', function (e) {
@@ -51,23 +96,24 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
         
     // listen for clicks to bring up discard and game log overlay
     // looks for data attribute and uses content from element with 
-    // matching id, e.g., data='game-log'
+    // matching id, e.g., data-show='game-log'
     if (typeof e.target.dataset.show !== 'undefined') {      
-      var overlayContent = document.getElementById( e.target.dataset.show ).outerHTML;
-          
-          if (overlay.className == 'shown') {
-            overlay.className = '';
-            overlayText.innerHTML = '';
+      var id = e.target.dataset.show,
+          overlayContent = document.getElementById( id ).outerHTML;
+          if (overlay.className == 'shown' && overlay.dataset.id === id) {
+            // overlay.className = '';
+            // overlayText.innerHTML = '';
           }else{
             overlayText.innerHTML = overlayContent
             overlay.className = 'shown';
+            overlay.dataset.id = id;
           }
           
       e.preventDefault();
     } 
     
     // Dismiss the overlay with a tap/click
-    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' ) {      
+    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' || e.target.dataset.dismiss ) {      
       overlay.className = '';
       e.preventDefault();
     } 
@@ -92,8 +138,6 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   // ajax call to update gamestate and alter board
    function handleGamePlay(){
     if (this.readyState == 4 && this.status == 200) {
-      // console.log("Ajax call success! Calling game state to update...");
-      // var httpRequest2 = new XMLHttpRequest();
       httpRequest.open('GET', '/board');
       httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
       httpRequest.send();
@@ -297,7 +341,5 @@ function kikuTalk(text) {
     return false;
   }  
 }
-
- 
   
 })()
