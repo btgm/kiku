@@ -9,12 +9,12 @@ router.get('/', function(req, res, next) {
   var gameState = req.session.gameState;
   
   var templates = {
-    'hand-player': swig.compileFile('views/templates/hand-player.html'),
-    'hand-computer': swig.compileFile('views/templates/hand-computer.html'),
-    'played': swig.compileFile('views/templates/played.html'),
-    'status': swig.compileFile('views/templates/status.html'),
-    'discard': swig.compileFile('views/templates/discard.html'),
-    'log':  swig.compileFile('views/templates/log.html'),
+    'hand-player': swig.compileFile('../view/templates/hand-player.html'),
+    'hand-computer': swig.compileFile('../view/templates/hand-computer.html'),
+    'played': swig.compileFile('../view/templates/played.html'),
+    'status': swig.compileFile('../view/templates/status.html'),
+    'discard': swig.compileFile('../view/templates/discard.html'),
+    'log':  swig.compileFile('../view/templates/log.html'),
   }
   
   // return the HTML snippets using element IDs as key
