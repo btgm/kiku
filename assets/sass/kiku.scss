@@ -642,6 +642,14 @@ a {
     opacity:1;
     transform: translate3d(-50%,-50%,0) scale(1);    
   }
+  
+  .card-color {
+    &.yellow { color:$yellow;}
+    &.blue { color:$blue;}
+    &.red { color:$red;}
+    &.green { color:$green;}
+    &.white { color:#fff;}
+  }
 }
 
 .computer-move, .player-move {

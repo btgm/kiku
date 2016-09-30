@@ -117,7 +117,7 @@ module.exports = {
       gameState.gameFinished = false;
     }
 
-    this.logDescriptively(gameState, handKey, 'discarded card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.');
+    this.logDescriptively(gameState, handKey, 'discarded card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</span>.');
 
     return true;
   },
@@ -138,7 +138,7 @@ module.exports = {
       // success!
       played[color].push(card);
       gameState.score++;
-      this.logDescriptively(gameState, handKey, 'successfully made contact with card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.');
+      this.logDescriptively(gameState, handKey, 'successfully made contact with card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</span>.');
     }
     else {
       // fail!
@@ -147,13 +147,13 @@ module.exports = {
 
       if (gameState.fuseTokens < 1) {
         gameState.gameFinished = true;
-        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' and ended the game.')
+        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</1> and ended the game.')
         return;
       }
 
       // put into the discard pile
       gameState.discard.push(card);
-      this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' unsuccessfully.');
+      this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</span> unsuccessfully.');
     }
 
     // deal card from top of deck to replace in hand
@@ -194,7 +194,7 @@ module.exports = {
     var color = card.color;
 
     if (gameState.timeTokens < 1) {
-      this.logDescriptively(gameState, handKey, ' could not be informed about their ' + color + ' cards because all satellites have been used. Discard cards to free up satellites.');
+      this.logDescriptively(gameState, handKey, ' could not be informed about their <span class="card-color ' + card.color + '">' + color + '</span> cards because all satellites have been used. Discard cards to free up satellites.');
       return false;
     }
 
@@ -204,7 +204,7 @@ module.exports = {
       }
     }
 
-    this.logDescriptively(gameState, handKey, 'were informed about all their ' + color + ' cards');
+    this.logDescriptively(gameState, handKey, 'were informed about all their <span class="card-color ' + card.color + '">' + color + ' cards</span>');
     gameState.timeTokens--;
 
     return true;
