@@ -1,0 +1,85 @@
+  <div class='no-js-only'>
+    <h2>Discard Pile</h2>
+    <ul id='hand-discard' class='hand'>
+      {% include 'discard.html' %}
+    </ul>
+
+    <h2>Game Log</h2>
+    <ol id='game-log'>
+      {% include 'log.html' %}
+    </ol>
+
+    <div id='options'>
+      <h1>⚙ Options</h1>
+      <p>
+        <label><input type='checkbox' id='speechOption' name='speech'> Enabled speech</label>
+      </p>
+    </div>
+
+    <div id='welcome'>
+          <h1>👾 Welcome to KIKU! 👾</h1>
+          <p>
+            Kiku is our collaborative submission for the 2016 <a href='https://a-k-apart.com'>10k Apart</a> contest. It's an adaptation of the card game <a href='https://en.wikipedia.org/wiki/Hanabi_(card_game)'>Hanabi</a> but with a little bit of a SETI twist, thematically, inspired this summer's <a href='http://www.cnn.com/2016/08/30/health/seti-signal-hd-164595-alien-civilization/'>report of a strong signal</a> from star HD164595. The word <a href='http://japanese.about.com/od/wordoftheday/p/word45.htm'>kiku</a> means "to hear/listen" in Japanese. As an homage to both Hanabi and this fun bit of news it seemed like an appropriate title.
+          </p>
+
+          <h2>How to Play</h2>
+
+          <p>The deck contains cards in 5 suits (white, yellow, green, blue, and red): three ones, two each of twos, threes, and fours, and one five. The game begins with 8 available satellite (information) tokens and 3 star (fuse) tokens. To start the game, players are dealt a hand containing five cards. Play proceeds around the table; each turn, a player must take one of the following actions:</p>
+      <ul>
+          <li><strong>Give info</strong>: The player points out the cards of either a given number or a given color in the hand of the computer. Giving info consumes one satellite (info) token.</li>
+          <li><strong>Discard</strong>: The player chooses a card from their hand and adds it to the discard pile and draws a card to replace it. Discarding a card replenishes one satellite (info) token.</li>
+          <li><strong>Play a card</strong>: The player chooses a card from their hand and attempts to add it to the cards already played. This is successful if the card is a one of a suit that has not yet been played, or if it is the next number sequentially in a suit that has been played. Otherwise a star (fuse) token is consumed and the misplayed card is discarded. Successfully playing a five of any suit replenishes one satellite (infor) token.</li>
+      </ul>
+          <p>Players lose immediately if all star (fuse) tokens are gone, and wins if all fives have been played successfully. Otherwise play continues until the deck becomes empty, and for one full round after that. At the end of the game, the values of the highest cards in each suit are summed, resulting in a total score out of a possible 25 points.</p>
+
+          <p>
+            As you inform the computer about cards in their hand, emoji appear beneath the computer's cards so you can keep track of what you've informed them about:
+          </p>
+
+          <ul>
+            <li>🎨 denotes the computer knowns about about the color</li>
+            <li>🔢 denotes the computer knowns about about the number</li>
+          </ul>
+
+    </div>
+
+  </div>
+
+  {% if gameState.gameFinished %}
+
+    <h1>The game has come to an end!</h1>
+    <p>
+      Your score: {{ gameState.score }} out of a possible 25.
+    </p>
+    <p>
+      <a href="/gameplay/reset">Play again?</a>
+    </p>
+
+  {% else %}
+
+  <form action='/gameplay' method='post'>
+    <div id="hand-computer" class="hand playable-hand">
+      {% include 'hand-computer.html' %}
+    </div>
+
+
+    <div class='label-container'>
+      <label for='play1'><span class='play-instructions'>Tell about color</span><input type="radio" id="play1" name="action" value='tellColor'></label><label for='play2'><span class='play-instructions'>Tell about number</span><input type="radio" id="play2" name="action" value='tellNumber'></label>
+    </div>
+
+    <h2 class='sr-only'>Played Cards</h2>
+      <ul id="played-cards">
+        {% include 'played.html' %}
+      </ul>
+
+    <div class='label-container'>
+      <label for='play3'><span class='play-instructions'>Discard a card</span><input type="radio" id="play3" name="action" value='discard'></label><label for='play4'><span class='play-instructions'>Play a card</span><input type="radio" id="play4" name="action" value='play' checked></label>
+    </div>
+
+    <div id="hand-player" class="hand playable-hand">
+      {% include 'hand-player.html' %}
+    </div>
+
+  </form>
+
+  {% endif %}
