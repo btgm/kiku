@@ -25,13 +25,14 @@
     <a href="#" data-show='hand-discard' class='js-only'>View Discards</a>
     <a href="#" data-show='game-log' class='js-only'>View Turns</a> 
     <a href="#" data-show='options' class='js-only'>Options</a> 
-    <a class="overlay-dismiss" title='Close this overlay' title='Close Menu'>[x]</a>
+    <a href="#" data-dismiss=true>[Close]</a>
     <a href="/gameplay/reset">[Restart]</a>
     <a class="overlay-read hidden" title='Have your browser read this overlay to you via text-to-speech, if supported.'>[Read Aloud]</a>
+    <a class="overlay-dismiss" title='Close this overlay' title='Close Menu'>[x]</a>
   </div>
 
-  {% if gameState.log.length === 0 %}
   <div id='overlay-text' class='overlay-text'>    
+  {% if gameState.log.length === 0 %}
     <h1>Welcome to KIKU!</h1>
     <p>
       Kiku is our collaborative submission for the 2016 <a href='https://a-k-apart.com'>10k Apart</a> contest. It's an adaptation of the card game <a href='https://en.wikipedia.org/wiki/Hanabi_(card_game)'>Hanabi</a> but with a little bit of a SETI twist, thematically, inspired this summer's <a href='http://www.cnn.com/2016/08/30/health/seti-signal-hd-164595-alien-civilization/'>report of a strong signal</a> from star HD164595. The word <a href='http://japanese.about.com/od/wordoftheday/p/word45.htm'>kiku</a> means "to hear/listen" in Japanese. As an homage to both Hanabi and this fun bit of news it seemed like an appropriate title.
@@ -55,10 +56,9 @@
       <li>🎨 denotes the computer knowns about about the color</li>
       <li>🔢 denotes the computer knowns about about the number</li>
     </ul>
-    
-
-  </div>
   {% endif %}  
+  </div>
+  
   
 </div>
 <script>
