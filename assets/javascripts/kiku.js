@@ -327,7 +327,7 @@ if (typeof SpeechSynthesisUtterance != 'undefined') {
 }
 
 function kikuTalk(text) {
-  if (typeof SpeechSynthesisUtterance != 'undefined') {
+  if (typeof SpeechSynthesisUtterance != 'undefined' ) {
     speech =  new SpeechSynthesisUtterance();
     speech.onend = function(){};
     

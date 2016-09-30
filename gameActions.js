@@ -54,7 +54,46 @@ module.exports = {
 
     return gameState;
   },
-
+  
+  'logDescriptively': function(gameState, handKey, message) {
+    var subject = (handKey == 'computer ') ? 'The aliens' : 'You ';
+    var quotes = [
+      "Somewhere, something incredible is waiting to be known.",
+      "For small creatures such as we the vastness is bearable only through love.",
+      "Imagination will often carry us to worlds that never were. But without it we go nowhere.",
+      "If you want to make an apple pie from scratch, you must first create the universe.",
+      "For me, it is far better to grasp the Universe as it really is than to persist in delusion, however satisfying and reassuring.",
+      "We're made of star stuff. We are a way for the cosmos to know itself.",
+      "Absence of evidence is not evidence of absence.",
+      "We are like butterflies who flutter for a day and think it is forever.",
+      "Science is not only compatible with spirituality; it is a profound source of spirituality.",
+      "We live in a society exquisitely dependent on science and technology, in which hardly anyone knows anything about science and technology.",
+      "Perhaps we've never been visited by aliens because they have looked upon Earth and decided there's no sign of intelligent life.",
+      "We are part of this universe; we are in this universe, but perhaps more important than both of those facts, is that the universe is in us.",
+      "Science is basically an inoculation against charlatans.",
+      "Life would be tragic if it weren't funny.",
+      "Intelligence is the ability to adapt to change.",
+      "We are just an advanced breed of monkeys on a minor planet of a very average star. But we can understand the Universe. That makes us something very special.",
+      "Not only does God play dice, but... he sometimes throws them where they cannot be seen.",
+      "We only have to look at ourselves to see how intelligent life might develop into something we wouldn’t want to meet."
+    ]
+    
+    var quote = quotes[ Math.round( Math.random() * quotes.length ) ];
+    
+    if (handKey == 'player') {
+      handKey = 'The earthlings ';
+    }else{
+      handKey = "The aliens ";
+    }
+    if (handKey == 'computer') subject == 'The aliens ';
+    
+    if (gameState.gameFinished == true) {
+      message += ' The universe is a <a href="https://www.youtube.com/watch?v=V8AuYmID4wc">quiet, lonely place...</a>';
+    }
+        
+    gameState.log.push(handKey + " " + message);
+  },
+  
   'discard': function(gameState, handKey, cardIndex) {
     var hand = gameState[handKey];
 
@@ -77,8 +116,8 @@ module.exports = {
     }else if (gameState.computer.length === 4 && gameState.player.length === 4) {
       gameState.gameFinished = false;
     }
-
-    gameState.log.push(handKey + ' discarded card #' + cardIndex);
+    
+    this.logDescriptively(gameState, handKey, 'discarded card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.')
   },
 
   'play': function(gameState, handKey, cardIndex) {
@@ -97,7 +136,7 @@ module.exports = {
       // success!
       played[color].push(card);
       gameState.score++;
-      gameState.log.push(handKey + ' played card #' + cardIndex + ' successfully');
+      this.logDescriptively(gameState, handKey, 'successfully made contact with card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.');
     }
     else {
       // fail!
@@ -106,13 +145,13 @@ module.exports = {
 
       if (gameState.fuseTokens < 1) {
         gameState.gameFinished = true;
-        gameState.log.push(handKey + ' played card #' + cardIndex + ' unsuccessfully and ENDED THE GAME');
+        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' and ended the game.')          
         return;
       }
 
       // put into the discard pile
       gameState.discard.push(card);
-      gameState.log.push(handKey + ' played card #' + cardIndex + ' unsuccessfully');
+      this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' unsuccessfully.');
     }
 
     // deal card from top of deck to replace in hand
@@ -138,7 +177,7 @@ module.exports = {
       }
     }
 
-    gameState.log.push(handKey + ' was informed about all their ' + number + ' cards');
+    this.logDescriptively(gameState, handKey, ' were informed about all their ' + number + ' cards.');
     gameState.timeTokens--;
   },
 
@@ -157,7 +196,7 @@ module.exports = {
       }
     }
 
-    gameState.log.push(handKey + ' was informed about all their ' + color + ' cards');
+    this.logDescriptively(gameState, handKey, 'were informed about all their ' + color + ' cards');
     gameState.timeTokens--;
   },
 

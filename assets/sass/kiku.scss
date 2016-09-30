@@ -78,12 +78,6 @@ $green: #2ECC40;
 
 ****************/
 
-label {
-  display:block;
-  cursor:pointer;
-}
-
-
 button {
   appearance:none;
   outline:none;
@@ -506,7 +500,7 @@ a {
   transform: translate3d(-50%,-50%,0);    
 }
 
-label  {
+.label-container label  {
   display:inline-block;
   width: 50vw;
   padding:1em;
@@ -523,8 +517,6 @@ label  {
   &:last-of-type {
     background: lighten(#001f3f, 5%);    
   }
-  
-  
 
 }
 

@@ -2,11 +2,11 @@
   <span class='game-score game-status-item'><span class='hide-mobile'>SCORE</span>  {{ gameState.score }} / 25</span>
   <span class='game-time-tokens game-status-item'><span class='hide-mobile'>INFO</span>  <span class='sr-only'>{{ gameState.timeTokens }}</span>
   {% set timeTokens = Array(gameState.timeTokens) %}
-  {% for t in timeTokens %}🛰{% endfor %}
+  {% if timeTokens.length > 0 %}{% for t in timeTokens %}🛰{% endfor %}{% endif %}
   </span>
   <span class='game-fuse-tokens game-status-item'><span class='hide-mobile'>STARS</span> <span class='sr-only'>{{ gameState.fuseTokens }}</span>
   {% set fuseTokens = Array(gameState.fuseTokens) %}
-  {% for t in fuseTokens %}⭐️{% endfor %}    
+  {% if fuseTokens.length > 0 %}{% for t in fuseTokens %}⭐️{% endfor %}{% endif %}
   </span>
 </div>
     <h1 id="title">KIKU</h1>
