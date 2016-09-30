@@ -25,6 +25,8 @@ router.get('/', function(req, res, next) {
     'game-status': templates['status']( { gameState: gameState } ),
     'hand-discard': templates['discard']( { gameState: gameState } ),
     'game-log': templates['log']( { gameState: gameState } ),
+    'computer-move-description': gameState.log[gameState.log.length - 1],
+    'player-move-description': gameState.log[gameState.log.length - 2]
   };
   
   res.set({
