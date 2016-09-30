@@ -9,7 +9,11 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
 (function(){
   var plays = document.querySelectorAll('input'),
       form = document.forms[0],
-      httpRequest = new XMLHttpRequest();
+      httpRequest = new XMLHttpRequest(),
+      overlay = document.getElementById('overlay'),
+      overlayText = document.getElementById('overlay-text'),
+      notification =  document.getElementById('notification'),
+      notificationTimeout;
   
   // Dropping cards on a play
   for(var p=0; p < plays.length;p++) {
@@ -40,20 +44,22 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   document.addEventListener('click', function (e) {
     if (e.target.nodeName === 'BUTTON' || e.target.parentNode.nodeName === 'BUTTON') {        
         var card = e.target.nodeName === 'BUTTON' ? e.target : e.target.parentNode;
-        console.log(card);
         form.dataset.button = card.value;        
+        form.dataset.color = card.className.match(/color\-(red|white|blue|green|yellow)/)[1]
+        form.dataset.number = card.className.match(/number\-([1-5])/)[1]
     } 
         
-    // listen for clicks to bring up discard and game log overlay   
+    // listen for clicks to bring up discard and game log overlay
+    // looks for data attribute and uses content from element with 
+    // matching id, e.g., data='game-log'
     if (typeof e.target.dataset.show !== 'undefined') {      
-      var overlayContent = document.getElementById( e.target.dataset.show ).outerHTML,
-          overlay = document.getElementById('overlay');
+      var overlayContent = document.getElementById( e.target.dataset.show ).outerHTML;
           
           if (overlay.className == 'shown') {
             overlay.className = '';
-            overlay.innerHTML = '';
+            overlayText.innerHTML = '';
           }else{
-            overlay.innerHTML = overlayContent
+            overlayText.innerHTML = overlayContent
             overlay.className = 'shown';
           }
           
@@ -61,9 +67,25 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
     } 
     
     // Dismiss the overlay with a tap/click
-    if (e.target.id === 'overlay') {      
-      e.target.className='';
+    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' ) {      
+      overlay.className = '';
+      e.preventDefault();
     } 
+    
+    // close the notification overlay
+    if (e.target.id === 'notification') {
+      notification.style.zIndex = -1; 
+      notification.className = "";  
+      clearTimeout(notificationTimeout);
+    }
+    
+    // read contents of the overlay outloud, if supported
+    if (e.target.className === 'overlay-read' ) {      
+      kikuTalk(overlayText.innerText)
+      e.preventDefault();
+    } 
+    
+    
   })
     
   // after the POST request for a play is made do another
@@ -77,11 +99,26 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       httpRequest.send();
       httpRequest.onreadystatechange = function(){
         if (this.readyState == 4 && this.status == 200) {
-          var response = JSON.parse(this.responseText);
+          var response = JSON.parse(this.responseText);        
           // Update the board with this data
           for (var id in response) {
-            document.getElementById(id).innerHTML = response[id];
-          }          
+            var el = document.getElementById(id)
+            if (el !== null) {
+              el.innerHTML = response[id];
+            }            
+          }
+          
+          // speak moves
+          kikuTalk(response['player-move-description']);
+          kikuTalk(response['computer-move-description']);
+          notification.style.zIndex = 1; 
+          notification.innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
+          notification.className = "show"; 
+
+          notificationTimeout = setTimeout(function(){
+            notification.style.zIndex = -1; 
+            notification.className = "";             
+          },5500);
         }
       };      
     }
@@ -90,12 +127,15 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
   // ajax
   form.addEventListener('submit', function(e){
     var action = document.querySelector('input:checked').value;
+    
+    var color = form.dataset.color;
+    var number = form.dataset.number;
+    var description = "";
+        
     httpRequest.onreadystatechange = handleGamePlay;
     httpRequest.open('POST', '/gameplay');
     httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    httpRequest.send("action=" + action + "&card=" + form.dataset.button);    
-    console.log(form.dataset.button);
-    console.log(action);
+    httpRequest.send("action=" + action + "&card=" + form.dataset.button);        
     
     e.preventDefault();  
   });
@@ -208,11 +248,56 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
  	return konami;
  };
  
- // cheat and show your cards
+ /***
+ 
+   Cheat and show your cards
+ 
+ ***/
  var cheat = new Konami(function(){   
     var cards = document.querySelectorAll('#hand-player .card')
    for (var c=0; c < cards.length;c++) { cards[c].className += " color-known-true number-known-true";}
  });
+ 
+
+ /***
+ 
+   Close overlay if open when hitting escape
+ 
+ ***/
+ 
+ document.addEventListener('keydown', function(e){
+   if (e.keyCode === 27) overlay.className = '';
+ });
+ 
+ 
+ /***
+ 
+  Speech Synthesis capabilities
+ 
+ **/
+ 
+ var speech = false; 
+
+if (typeof SpeechSynthesisUtterance != 'undefined') {
+  document.querySelector('.overlay-read').className='overlay-read';
+}
+
+function kikuTalk(text) {
+  if (typeof SpeechSynthesisUtterance != 'undefined') {
+    speech =  new SpeechSynthesisUtterance();
+    speech.onend = function(){};
+    
+   var speechSynthesis = window.speechSynthesis;    
+   speech.text = text;
+   
+   speechSynthesis.speak(speech);
+
+   return true;
+  }else{
+    return false;
+  }  
+}
+
  
   
 })()

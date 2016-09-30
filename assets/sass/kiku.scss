@@ -481,6 +481,8 @@ label  {
   z-index:1;
   visibility: hidden;
   transition: 350ms all;
+  overflow-y: scroll;
+  
   &.shown {
     z-index:99;
     background:rgba(0,0,0,.8);
@@ -488,11 +490,23 @@ label  {
     opacity:1;
   }
 }
-
+.overlay-dismiss,.overlay-read {
+  padding:1em;
+  margin:.5em;
+  background:rgba(255,255,255,.2);
+  display:inline-block;
+  color:#fff;
+  cursor:pointer;
+}
 .overlay-text {
-  max-width:60vw;
+  max-width:90vw;
   margin:0 auto;
   line-height:1.8em;
+  
+  @media screen and (min-width: 720px) {
+    max-width:60vw;
+  }
+  
   
   h1,h2,h3,h4,h5 {
     color: rgba(0,0,0,1);
@@ -504,8 +518,40 @@ label  {
            1px 1px 0 #fff;
     text-transform: uppercase;    
     text-align:center;
+    font-size:1.6em;
+  }
+    
+  
+}
+
+
+/*****
+
+ Notification
+
+*****/
+
+#notification {
+  position: fixed;
+  background: rgba(0,0,0, .75);
+  cursor:pointer;
+  width: 75vw;
+  height:30vh;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%,-40%,0) scale(.25);
+  box-shadow: 0 20px 5px rgba(0,0,0, .75);
+  transition: 250ms all;
+  opacity:0;
+  padding:2em;
+  text-align:center;
+  z-index:-1;
+  &.show {
+    opacity:1;
+    transform: translate3d(-50%,-50%,0) scale(1);    
   }
 }
+
 
 /*****
 
