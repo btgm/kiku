@@ -345,4 +345,11 @@ function kikuTalk(text) {
   }
 }
 
+var introElement = document.getElementById('intro-overlay');
+if (introElement) {
+  notification.style.zIndex = 1;
+  notification.className = 'show';
+  notification.innerHTML = introElement.innerHTML;
+}
+
 })()
