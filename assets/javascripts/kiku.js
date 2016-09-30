@@ -11,7 +11,9 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       form = document.forms[0],
       httpRequest = new XMLHttpRequest(),
       overlay = document.getElementById('overlay'),
-      overlayText = document.getElementById('overlay-text');
+      overlayText = document.getElementById('overlay-text'),
+      notification =  document.getElementById('notification'),
+      notificationTimeout;
   
   // Dropping cards on a play
   for(var p=0; p < plays.length;p++) {
@@ -70,6 +72,13 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
       e.preventDefault();
     } 
     
+    // close the notification overlay
+    if (e.target.id === 'notification') {
+      notification.style.zIndex = -1; 
+      notification.className = "";  
+      clearTimeout(notificationTimeout);
+    }
+    
     // read contents of the overlay outloud, if supported
     if (e.target.className === 'overlay-read' ) {      
       kikuTalk(overlayText.innerText)
@@ -94,21 +103,22 @@ Thanks: https://github.com/timruffles/ios-html5-drag-drop-shim
           // Update the board with this data
           for (var id in response) {
             var el = document.getElementById(id)
-            if (typeof el !== 'null') {
+            if (el !== null) {
+              el.innerHTML = response[id];
             }            
           }
           
           // speak moves
           kikuTalk(response['player-move-description']);
           kikuTalk(response['computer-move-description']);
-          document.getElementById('notification').style.zIndex = 1; 
-          document.getElementById('notification').innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
-          document.getElementById('notification').className = "show"; 
+          notification.style.zIndex = 1; 
+          notification.innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
+          notification.className = "show"; 
 
-          setTimeout(function(){
-            document.getElementById('notification').style.zIndex = 1; 
-            document.getElementById('notification').className = "";             
-          },1800);
+          notificationTimeout = setTimeout(function(){
+            notification.style.zIndex = -1; 
+            notification.className = "";             
+          },5500);
         }
       };      
     }
