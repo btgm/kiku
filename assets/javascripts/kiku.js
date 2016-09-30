@@ -15,89 +15,89 @@
       overlayText = document.getElementById('overlay-text'),
       notification =  document.getElementById('notification'),
       notificationTimeout;
-  
+
   // Dropping cards on a play
   for(var p=0; p < plays.length;p++) {
-    var play = plays[p];    
-    play.addEventListener('dragover', function(e){    
+    var play = plays[p];
+    play.addEventListener('dragover', function(e){
       this.checked = true
       e.preventDefault();
     });
-    
+
     // Make a play with dropped card by trigger click to submit the form
-    play.addEventListener('drop', function(e){    
+    play.addEventListener('drop', function(e){
       e.preventDefault();
       var card = e.dataTransfer.getData("card"),
-          card_element = document.getElementsByClassName(card)[0];      
+          card_element = document.getElementsByClassName(card)[0];
           form.dataset.button = card_element.value;
           card_element.click();
     });
   }
-  
+
   // Dragging a button to one of the plays
   document.addEventListener('dragstart', function (e) {
       if (e.target.nodeName === 'BUTTON') {
           e.dataTransfer.setData("card", e.target.className);
       }
   });
-  
+
   // Because hovering is complicated sometimes
-  function returnSpecificParent(el, id) {   
+  function returnSpecificParent(el, id) {
     while (el.parentNode) {
       var previousElement = el;
       el = el.parentNode;
       if (el.id === id) return previousElement;
     }
     return null;
-  }  
-  
+  }
+
   // Dragging card onto a stack to play
-  document.addEventListener('dragenter', function(e){ 
+  document.addEventListener('dragenter', function(e){
     var el =  returnSpecificParent (e.target, 'played-cards');
     if ( el ) {
       el.className += ' hover-played';
       document.querySelector('input[value=play]').checked=true;
     }
   });
-  
-  document.addEventListener('dragover', function(e){    
+
+  document.addEventListener('dragover', function(e){
     var el = returnSpecificParent (e.target, 'played-cards');
     if ( el ) e.preventDefault();
-  });    
+  });
 
-  document.addEventListener('dragleave', function(e){    
+  document.addEventListener('dragleave', function(e){
     var el =  returnSpecificParent (e.target, 'played-cards');
     if ( el ) {
-      el.className = el.className.replace(" hover-played", "");      
+      el.className = el.className.replace(" hover-played", "");
     }
   });
-  
+
   // Make a play with dropped card by trigger click to submit the form
-  document.addEventListener('drop', function(e){    
+  document.addEventListener('drop', function(e){
     if ( e.target.parentNode.id === 'played-cards' || e.target.parentNode.className == 'played-cards-stack') {
       e.preventDefault();
       var card = e.dataTransfer.getData("card"),
-          card_element = document.getElementsByClassName(card)[0];      
+          card_element = document.getElementsByClassName(card)[0];
           form.dataset.button = card_element.value;
           card_element.click();
     }
   });
-  
-  
-  
+
+
+
   // ordinary click
   document.addEventListener('click', function (e) {
-    if (e.target.nodeName === 'BUTTON' || e.target.parentNode.nodeName === 'BUTTON') {        
+    if (e.target.nodeName === 'BUTTON' || e.target.parentNode.nodeName === 'BUTTON') {
         var card = e.target.nodeName === 'BUTTON' ? e.target : e.target.parentNode;
-        form.dataset.button = card.value;        
+        form.dataset.button = card.value;
         form.dataset.color = card.className.match(/color\-(red|white|blue|green|yellow)/)[1]
         form.dataset.number = card.className.match(/number\-([1-5])/)[1]
-    } 
-        
+    }
+
     // listen for clicks to bring up discard and game log overlay
-    // looks for data attribute and uses content from element with 
+    // looks for data attribute and uses content from element with
     // matching id, e.g., data-show='game-log'
-    if (typeof e.target.dataset.show !== 'undefined') {      
+    if (typeof e.target.dataset.show !== 'undefined') {
       var id = e.target.dataset.show,
           overlayContent = document.getElementById( id ).outerHTML;
           if (overlay.className == 'shown' && overlay.dataset.id === id) {
@@ -108,89 +108,83 @@
             overlay.className = 'shown';
             overlay.dataset.id = id;
           }
-          
+
       e.preventDefault();
-    } 
-    
+    }
+
     // Dismiss the overlay with a tap/click
-    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' || e.target.dataset.dismiss ) {      
+    if (e.target.id === 'overlay' || e.target.className === 'overlay-dismiss' || e.target.dataset.dismiss ) {
       overlay.className = '';
       e.preventDefault();
-    } 
-    
+    }
+
     // close the notification overlay
     if (e.target.id === 'notification') {
-      notification.style.zIndex = -1; 
-      notification.className = "";  
+      notification.style.zIndex = -1;
+      notification.className = "";
       clearTimeout(notificationTimeout);
       window.speechSynthesis.cancel()
     }
-    
+
     // read contents of the overlay outloud, if supported
-    if (e.target.className === 'overlay-read' ) {      
+    if (e.target.className === 'overlay-read' ) {
       kikuTalk(overlayText.innerText)
       e.preventDefault();
-    } 
-    
-    
+    }
+
+
   })
-    
+
   // after the POST request for a play is made do another
   // ajax call to update gamestate and alter board
    function handleGamePlay(){
     if (this.readyState == 4 && this.status == 200) {
-      httpRequest.open('GET', '/board');
-      httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-      httpRequest.send();
-      httpRequest.onreadystatechange = function(){
-        if (this.readyState == 4 && this.status == 200) {
-          var response = JSON.parse(this.responseText);        
-          // Update the board with this data
-          for (var id in response) {
-            var el = document.getElementById(id)
-            if (el !== null) {
-              el.innerHTML = response[id];
-            }            
-          }
-          
-          // speak moves
-          kikuTalk(response['player-move-description']);
-          kikuTalk(response['computer-move-description']);
-          notification.style.zIndex = 1; 
-          notification.innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
-          notification.className = "show"; 
-
-          notificationTimeout = setTimeout(function(){
-            notification.style.zIndex = -1; 
-            notification.className = "";
-            if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
-          },5500);
+      var response = JSON.parse(this.responseText);
+      // Update the board with this data
+      for (var id in response) {
+        var el = document.getElementById(id)
+        if (el !== null) {
+          el.innerHTML = response[id];
         }
-      };      
+      }
+
+      // speak moves
+      kikuTalk(response['player-move-description']);
+      kikuTalk(response['computer-move-description']);
+      notification.style.zIndex = 1;
+      notification.innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
+      notification.className = "show";
+
+      notificationTimeout = setTimeout(function(){
+        notification.style.zIndex = -1;
+        notification.className = "";
+        if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
+      },5500);
     }
   };
-      
+
   // ajax
   form.addEventListener('submit', function(e){
     var action = document.querySelector('input:checked').value;
-    
+
     var color = form.dataset.color;
     var number = form.dataset.number;
     var description = "";
-        
+
     httpRequest.onreadystatechange = handleGamePlay;
     httpRequest.open('POST', '/gameplay');
     httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    httpRequest.send("action=" + action + "&card=" + form.dataset.button);        
-    
-    e.preventDefault();  
+    httpRequest.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+    httpRequest.send("action=" + action + "&card=" + form.dataset.button);
+
+    e.preventDefault();
   });
 
-  
-  
+
+
  /*
-  * Konami-JS ~ 
-  * :: Now with support for touch events and multiple instances for 
+  * Konami-JS ~
+  * :: Now with support for touch events and multiple instances for
   * :: those situations that call for multiple easter eggs!
   * Code: https://github.com/snaptortoise/konami-js
   * Examples: http://www.snaptortoise.com/konami-js
@@ -293,36 +287,36 @@
 
  	return konami;
  };
- 
+
  /***
- 
+
    Cheat and show your cards
- 
+
  ***/
- var cheat = new Konami(function(){   
+ var cheat = new Konami(function(){
     var cards = document.querySelectorAll('#hand-player .card')
    for (var c=0; c < cards.length;c++) { cards[c].className += " color-known-true number-known-true";}
  });
- 
+
 
  /***
- 
+
    Close overlay if open when hitting escape
- 
+
  ***/
- 
+
  document.addEventListener('keydown', function(e){
    if (e.keyCode === 27) overlay.className = '';
  });
- 
- 
+
+
  /***
- 
+
   Speech Synthesis capabilities
- 
+
  **/
- 
- var speech = false; 
+
+ var speech = false;
 
 if (typeof SpeechSynthesisUtterance != 'undefined') {
   document.querySelector('.overlay-read').className='overlay-read';
@@ -333,16 +327,16 @@ function kikuTalk(text) {
     if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
     speech =  new SpeechSynthesisUtterance();
     speech.onend = function(){};
-    
-   var speechSynthesis = window.speechSynthesis;    
+
+   var speechSynthesis = window.speechSynthesis;
    speech.text = text;
-   
+
    speechSynthesis.speak(speech);
 
    return true;
   }else{
     return false;
-  }  
+  }
 }
-  
+
 })()

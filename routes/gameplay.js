@@ -78,8 +78,14 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
 
     gameActions['calculateBothHands'](gameState);
 
-    res.redirect('/');
-    // res.send(actionKey+' card #' + cardIndex + ' from ' + handKey);
+    if (req.xhr) {
+      console.log('xhr request');
+      res.redirect('/board/');
+    }
+    else {
+      console.log('normal request');
+      res.redirect('/');
+    }
   }
 });
 
