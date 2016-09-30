@@ -378,6 +378,7 @@ a {
     height:100%;
     display:inline-block;
     position:relative;
+    transition:250ms all;
 
     &:nth-child(odd) {
       background:rgba(255,255,255,.033);
@@ -388,6 +389,10 @@ a {
     &.blue-played { border-top:5px $blue solid; border-bottom:5px $blue solid; }
     &.yellow-played { border-top:5px $yellow solid; border-bottom: 5px $yellow solid; }
     &.white-played { border-top:5px #fff solid; border-bottom: 5px #fff solid; }
+    
+    &.hover-played {
+      background:rgba(255,255,255,.1);
+    }
   }  
   
   
