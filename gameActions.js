@@ -54,7 +54,7 @@ module.exports = {
 
     return gameState;
   },
-  
+
   'logDescriptively': function(gameState, handKey, message) {
     var subject = (handKey == 'computer ') ? 'The aliens' : 'You ';
     var quotes = [
@@ -77,23 +77,23 @@ module.exports = {
       "Not only does God play dice, but... he sometimes throws them where they cannot be seen.",
       "We only have to look at ourselves to see how intelligent life might develop into something we wouldn’t want to meet."
     ]
-    
+
     var quote = quotes[ Math.round( Math.random() * quotes.length ) ];
-    
+
     if (handKey == 'player') {
       handKey = 'The earthlings ';
     }else{
       handKey = "The aliens ";
     }
     if (handKey == 'computer') subject == 'The aliens ';
-    
+
     if (gameState.gameFinished == true) {
       message += ' The universe is a <a href="https://www.youtube.com/watch?v=V8AuYmID4wc">quiet, lonely place...</a>';
     }
-        
+
     gameState.log.push(handKey + " " + message);
   },
-  
+
   'discard': function(gameState, handKey, cardIndex) {
     var hand = gameState[handKey];
 
@@ -116,8 +116,10 @@ module.exports = {
     }else if (gameState.computer.length === 4 && gameState.player.length === 4) {
       gameState.gameFinished = false;
     }
-    
-    this.logDescriptively(gameState, handKey, 'discarded card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.')
+
+    this.logDescriptively(gameState, handKey, 'discarded card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + '.');
+
+    return true;
   },
 
   'play': function(gameState, handKey, cardIndex) {
@@ -145,7 +147,7 @@ module.exports = {
 
       if (gameState.fuseTokens < 1) {
         gameState.gameFinished = true;
-        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' and ended the game.')          
+        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a ' + card.color + ' ' + card.number + ' and ended the game.')
         return;
       }
 
@@ -160,6 +162,8 @@ module.exports = {
     }else if (gameState.computer.length === 4 && gameState.player.length === 4) {
       gameState.gameFinished = false;
     }
+
+    return true;
   },
 
   'tellNumber': function(gameState, handKey, cardIndex) {
