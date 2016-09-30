@@ -7,14 +7,14 @@ var swig = require('swig');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   var gameState = req.session.gameState;
-  
+  console.log(__dirname);
   var templates = {
-    'hand-player': swig.compileFile('../view/templates/hand-player.html'),
-    'hand-computer': swig.compileFile('../view/templates/hand-computer.html'),
-    'played': swig.compileFile('../view/templates/played.html'),
-    'status': swig.compileFile('../view/templates/status.html'),
-    'discard': swig.compileFile('../view/templates/discard.html'),
-    'log':  swig.compileFile('../view/templates/log.html'),
+    'hand-player': swig.compileFile(__dirname + '/../views/templates/hand-player.html'),
+    'hand-computer': swig.compileFile(__dirname + '/../views/templates/hand-computer.html'),
+    'played': swig.compileFile(__dirname + '/../views/templates/played.html'),
+    'status': swig.compileFile(__dirname + '/../views/templates/status.html'),
+    'discard': swig.compileFile(__dirname + '/../views/templates/discard.html'),
+    'log':  swig.compileFile(__dirname + '/../views/templates/log.html'),
   }
   
   // return the HTML snippets using element IDs as key
