@@ -87,10 +87,6 @@ module.exports = {
     }
     if (handKey == 'computer') subject == 'The aliens ';
 
-    if (gameState.gameFinished == true) {
-      message += ' The universe is a <a href="https://www.youtube.com/watch?v=V8AuYmID4wc">quiet, lonely place...</a>';
-    }
-
     gameState.log.push(handKey + " " + message);
   },
 

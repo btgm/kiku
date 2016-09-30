@@ -46,11 +46,25 @@
   </div>
 
   {% if gameState.gameFinished %}
-
     <h1>The game has come to an end!</h1>
     <p>
       Your score: {{ gameState.score }} out of a possible 25.
     </p>
+    
+    {% if gameState.score < 20 %}
+    <p>
+      The universe is a <a href="https://www.youtube.com/watch?v=V8AuYmID4wc">quiet, lonely place...</a>
+    </p>
+    {% elseif gameState.score == 25 %}
+    <p>
+      CONTACT!
+    </p>
+    {% else %}
+    <p>
+      The universe can be a quiet place, but maybe it's not so lonely.</a>
+    </p>    
+    {% endif %}
+    
     <p>
       <a href="/gameplay/reset">Play again?</a>
     </p>
