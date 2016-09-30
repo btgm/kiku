@@ -123,6 +123,7 @@
       notification.style.zIndex = -1; 
       notification.className = "";  
       clearTimeout(notificationTimeout);
+      window.speechSynthesis.cancel()
     }
     
     // read contents of the overlay outloud, if supported
@@ -161,7 +162,8 @@
 
           notificationTimeout = setTimeout(function(){
             notification.style.zIndex = -1; 
-            notification.className = "";             
+            notification.className = "";
+            if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
           },5500);
         }
       };      
@@ -328,6 +330,7 @@ if (typeof SpeechSynthesisUtterance != 'undefined') {
 
 function kikuTalk(text) {
   if (typeof SpeechSynthesisUtterance != 'undefined' ) {
+    if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
     speech =  new SpeechSynthesisUtterance();
     speech.onend = function(){};
     
