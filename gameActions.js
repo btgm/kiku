@@ -147,7 +147,7 @@ module.exports = {
 
       if (gameState.fuseTokens < 1) {
         gameState.gameFinished = true;
-        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</1> and ended the game.')
+        this.logDescriptively(gameState, handKey, 'played card #' + (cardIndex+1) + ' which was a <span class="card-color ' + card.color + '">' + card.color + ' ' + card.number + '</span> and ended the game.')
         return;
       }
 
