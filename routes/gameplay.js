@@ -63,26 +63,13 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
     // if it's a post it was the player's play
     if (isPost) {
       // computer makes a play
-      //
-      var computerBestPlay = gameActions['calculateBestPlay'](gameState, 'computer');
-      var tellNumberBestPlay = gameActions['calculateTellBestPlay'](gameState, 'tellNumber');
-      var tellColorBestPlay = gameActions['calculateTellBestPlay'](gameState, 'tellColor');
-
-      var bestPlay = computerBestPlay;
-
-      if (tellNumberBestPlay.score > bestPlay.score) {
-        bestPlay = tellNumberBestPlay;
+      try {
+        var computerPlay = gameActions.calculateComputerMove(gameState, 'computer', 0);
+        gameActions[computerPlay.action](gameState, computerPlay.handKey, computerPlay.cardIndex);
       }
-      if (tellColorBestPlay.score > bestPlay.score) {
-        bestPlay = tellColorBestPlay;
+      catch(err) {
+        console.error(err.message);
       }
-      console.log('computerBestPlay', computerBestPlay);
-      console.log('tellNumberBestPlay', tellNumberBestPlay);
-      console.log('tellColorBestPlay', tellColorBestPlay);
-
-      var bestPlay = computerBestPlay;
-
-      gameActions[bestPlay.action](gameState, bestPlay.handKey, bestPlay.cardIndex);
 
     }
 

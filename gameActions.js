@@ -190,15 +190,63 @@ module.exports = {
     var bestPlay;
 
     for (var c = 0; c < gameState.player.length; c++) {
+      // if they already know the information for this card, then don't tell
+      // them again
+      var key = actionKey === 'tellNumber' ? 'isNumberKnown' : 'isColorKnown';
+      if (gameState.player[c][key]) {
+        continue;
+      }
+
       var cloned = JSON.parse(JSON.stringify(gameState));
       this[actionKey](cloned, 'player', c);
+      this.calculateBothHands(cloned);
       var play = this.calculateBestPlay(cloned, 'player');
 
-      if (play.score > score) {
-        score = play.score;
-        bestPlay = play;
+      if (gameState.player[c].canDiscard !== 0 && cloned.player[c].canDiscard === 0 && score < 1) {
+        score = 1;
+        bestPlay = {
+          play: play,
+          score: 1,
+          action: actionKey,
+          handKey: 'player',
+          cardIndex: c,
+        };
+        continue;
       }
+
+      var improvesKnowledge = !bestPlay || gameState.player[c].canPlay > cloned.player[c].canPlay || gameState.player[c].canDiscard > cloned.player[c].canDiscard;
+      var isHigherScore = play.score >= score;
+      if (improvesKnowledge && isHigherScore) {
+        score = play.score;
+        bestPlay = {
+          play: play,
+          score: play.score,
+          action: actionKey,
+          handKey: 'player',
+          cardIndex: c,
+        };
+        continue;
+      }
+
     }
+
+    return bestPlay;
+  },
+
+  'calculateComputerMove': function(gameState) {
+    var plays = [];
+    plays.push(this.calculateBestPlay(gameState, 'computer'));
+
+    if (gameState.timeTokens > 0) {
+      plays.push(this.calculateTellBestPlay(gameState, 'tellNumber'));
+      plays.push(this.calculateTellBestPlay(gameState, 'tellColor'));
+    }
+
+    plays.sort(function(a, b) {
+      return b.score - a.score;
+    });
+    bestPlay = plays[0];
+
 
     return bestPlay;
   },
@@ -206,7 +254,7 @@ module.exports = {
   'calculateBothHands': function(gameState) {
     this.calculateHand(gameState, 'computer');
     this.calculateHand(gameState, 'player');
-  }, 
+  },
 
   'calculateHand': function(gameState, handKey) {
     var hand = gameState[handKey];
@@ -217,11 +265,11 @@ module.exports = {
       hand[c].canDiscard = this.canDiscard(gameState, handKey, c);
       hand[c].canPlay = this.canPlay(gameState, handKey, c);
       playability += hand[c].canPlay;
-      discardability += hand[c].canDiscard;      
+      discardability += hand[c].canDiscard;
     }
-    
+
     gameState[handKey + 'Hand'] = {
-      "playability": playability,    
+      "playability": playability,
       "discardability": discardability
     }
 
@@ -272,8 +320,17 @@ module.exports = {
 
       if (count == 1) {
         badPossibilities.push(possibilities[p]);
+        continue;
+      }
+
+      // now check and see if it is a card we could play, because that would also not be ideal
+      if (possibilities[p].number == 1+gameState.played[possibilities[p].color].length) {
+        badPossibilities.push(possibilities[p]);
       }
     }
+
+    //console.log(possibilities);
+    //console.log(badPossibilities);
 
     return Math.round(100-badPossibilities.length/possibilities.length*100)/100;
   },
