@@ -151,15 +151,15 @@
       }
 
       notification.style.zIndex = 1;
-      notification.innerHTML = response['player-move-description'] + "<hr>" + response['computer-move-description'];
+      notification.innerHTML = "<div class='player-move'>" + response['player-move-description'] + "</div><div class='computer-move'>" + response['computer-move-description'] + "</div>";
       notification.className = "show";
 
-      var textToReat = notification.innerText;
-      console.log(notification.innerText, textToReat.length);
+      var textToRead = notification.innerText;
+      console.log(notification.innerText, textToRead.length);
 
-      var duration = textToReat.length > 150 ? 14000 : 7500;
+      var duration = textToRead.length > 150 ? 14000 : 7500;
       // speak moves
-      kikuTalk(textToReat);
+      kikuTalk(textToRead);
 
       notificationTimeout = setTimeout(function(){
         notification.style.zIndex = -1;
