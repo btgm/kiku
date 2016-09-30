@@ -56,21 +56,24 @@ router.get('/:actionKey/:handKey/:cardIndex/:isPost?', function(req, res, next) 
     res.send('Illegal move by player on computer hand.');
   }
   else {
-    gameActions[actionKey](gameState, handKey, cardIndex);
+    var successful = gameActions[actionKey](gameState, handKey, cardIndex);
 
-    gameActions['calculateBothHands'](gameState);
+    if (successful) {
+      gameActions['calculateBothHands'](gameState);
 
-    // if it's a post it was the player's play
-    if (isPost) {
-      // computer makes a play
-      try {
-        var computerPlay = gameActions.calculateComputerMove(gameState, 'computer', 0);
-        gameActions[computerPlay.action](gameState, computerPlay.handKey, computerPlay.cardIndex);
+      // if it's a post it was the player's play
+      if (isPost && !gameState.gameFinished) {
+        // computer makes a play
+        try {
+          var computerPlay = gameActions.calculateComputerMove(gameState, 'computer', 0);
+          console.log('computerPlay', computerPlay);
+          gameActions[computerPlay.action](gameState, computerPlay.handKey, computerPlay.cardIndex);
+        }
+        catch(err) {
+          console.error(err.message);
+        }
+
       }
-      catch(err) {
-        console.error(err.message);
-      }
-
     }
 
     gameActions['calculateBothHands'](gameState);

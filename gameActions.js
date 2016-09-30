@@ -168,7 +168,8 @@ module.exports = {
     var number = card.number * 1;
 
     if (gameState.timeTokens < 1) {
-      return;
+      this.logDescriptively(gameState, handKey, ' could not be informed about their ' + number + ' cards because all satellites have been used. Discard cards to free up satellites.');
+      return false;
     }
 
     for (var h = 0; h < hand.length; h++) {
@@ -179,6 +180,8 @@ module.exports = {
 
     this.logDescriptively(gameState, handKey, ' were informed about all their ' + number + ' cards.');
     gameState.timeTokens--;
+
+    return true;
   },
 
   'tellColor': function(gameState, handKey, cardIndex) {
@@ -187,7 +190,8 @@ module.exports = {
     var color = card.color;
 
     if (gameState.timeTokens < 1) {
-      return;
+      this.logDescriptively(gameState, handKey, ' could not be informed about their ' + color + ' cards because all satellites have been used. Discard cards to free up satellites.');
+      return false;
     }
 
     for (var h = 0; h < hand.length; h++) {
@@ -198,6 +202,8 @@ module.exports = {
 
     this.logDescriptively(gameState, handKey, 'were informed about all their ' + color + ' cards');
     gameState.timeTokens--;
+
+    return true;
   },
 
   'calculateBestPlay': function(gameState, handKey) {
