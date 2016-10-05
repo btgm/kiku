@@ -149,23 +149,8 @@
           el.innerHTML = response[id];
         }
       }
-
-      notification.style.zIndex = 1;
-      notification.innerHTML = "<div class='player-move'>" + response['player-move-description'] + "</div><div class='computer-move'>" + response['computer-move-description'] + "</div>";
-      notification.className = "show";
-
-      var textToRead = notification.innerText;
-      console.log(notification.innerText, textToRead.length);
-
-      var duration = textToRead.length > 150 ? 14000 : 7500;
-      // speak moves
-      kikuTalk(textToRead);
-
-      notificationTimeout = setTimeout(function(){
-        notification.style.zIndex = -1;
-        notification.className = "";
-        if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
-      },duration);
+      
+      kikuNotify("<div class='player-move'>" + response['player-move-description'] + "</div><div class='computer-move'>" + response['computer-move-description'] + "</div>")
     }
   };
 
@@ -176,7 +161,24 @@
     var color = form.dataset.color;
     var number = form.dataset.number;
     var description = "";
-
+    
+    switch (action) {
+      case "tellNumber":
+        description = "Informing the aliens about all their " + number + " cards.";
+      break;
+      case "tellColor":
+        description = "Informing the aliens about all their <span class='card-color " + color + "'>" + color + "</span> cards.";
+      break;
+      case "play":
+        description = "Playing card <span class='card-color " + color + "'>" + color + " " + number + "</span>.";
+      break;
+      case "discard":
+        description = "Discarding card <span class='card-color " + color + "'>" + color + " " + number + "</span>.";
+      break;
+    }
+    
+    kikuNotify(description + " Waiting for a response...");
+    
     httpRequest.onreadystatechange = handleGamePlay;
     httpRequest.open('POST', '/gameplay');
     httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
@@ -343,6 +345,25 @@ function kikuTalk(text) {
   }else{
     return false;
   }
+}
+
+function kikuNotify(message) {
+  notification.style.zIndex = 1;
+  notification.innerHTML = message;
+  notification.className = "show";
+
+  var textToRead = notification.innerText;
+  
+  var duration = textToRead.length > 150 ? 14000 : 7500;
+  // speak moves
+  kikuTalk(textToRead);
+
+  notificationTimeout = setTimeout(function(){
+    notification.style.zIndex = -1;
+    notification.className = "";
+    if ( typeof window.speechSynthesis !== 'undefined' ) window.speechSynthesis.cancel();
+  },duration);
+  
 }
 
 var introElement = document.getElementById('intro-overlay');
