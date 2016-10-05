@@ -150,7 +150,7 @@
         }
       }
       
-      kikuNotify("<div class='player-move'>" + response['player-move-description'] + "</div><div class='computer-move'>" + response['computer-move-description'] + "</div>")
+      kikuNotify("<div class='player-move'>" + response['player-move-description'] + "</div><div class='computer-move'>" + response['computer-move-description'] + "</div>", true)
     }
   };
 
@@ -177,7 +177,7 @@
       break;
     }
     
-    kikuNotify(description + " Waiting for a response...");
+    kikuNotify(description + " Waiting for a response...", false);
     
     httpRequest.onreadystatechange = handleGamePlay;
     httpRequest.open('POST', '/gameplay');
@@ -347,7 +347,7 @@ function kikuTalk(text) {
   }
 }
 
-function kikuNotify(message) {
+function kikuNotify(message, speak) {
   notification.style.zIndex = 1;
   notification.innerHTML = message;
   notification.className = "show";
@@ -356,8 +356,9 @@ function kikuNotify(message) {
   
   var duration = textToRead.length > 150 ? 14000 : 7500;
   // speak moves
-  kikuTalk(textToRead);
+  if (speak) kikuTalk(textToRead);
 
+  clearTimeout(notificationTimeout);
   notificationTimeout = setTimeout(function(){
     notification.style.zIndex = -1;
     notification.className = "";
